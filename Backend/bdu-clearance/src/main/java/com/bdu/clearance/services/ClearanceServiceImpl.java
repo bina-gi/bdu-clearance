@@ -23,27 +23,27 @@ public class ClearanceServiceImpl implements ClearanceService{
     }
 
     @Override
-    public void requestClearance(Clearance clearance) {
+    public void createClearance(Clearance clearance) {
         clearance.setId(nextId++);
         clearanceRepository.save(clearance);
     }
 
     @Override
     public String deleteClearance(Long clearanceId) {
-        List<Clearance> clearances=clearanceRepository.findAll();
-        Clearance clearance=clearances.stream().filter(c->c.getId().equals(clearanceId))
+        List<Clearance> allClearances=clearanceRepository.findAll();
+        Clearance clearance=allClearances.stream().filter(c->c.getId().equals(clearanceId))
                 .findFirst()
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         clearanceRepository.delete(clearance);
-        return "Clearance with ID: "+ clearanceId+" deleted Successfully!";
+        return "Clearance with ID: "+ clearanceId +" deleted Successfully!";
     }
 
     @Override
     public Clearance updateLibraryStatus(Clearance clearance, Long clearanceId) {
-        List<Clearance> clearances=clearanceRepository.findAll();
+        List<Clearance> allClearances=clearanceRepository.findAll();
 
-        Optional<Clearance> optionalClearance=clearances.stream().filter(c->c.getId().equals(clearanceId))
+        Optional<Clearance> optionalClearance=allClearances.stream().filter(c->c.getId().equals(clearanceId))
                 .findFirst();
         if(optionalClearance.isPresent()){
             Clearance existingClearance=optionalClearance.get();

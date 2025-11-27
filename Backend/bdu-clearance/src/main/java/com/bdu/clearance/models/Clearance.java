@@ -1,9 +1,6 @@
 package com.bdu.clearance.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,6 @@ public class Clearance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String studentId;
     private Boolean libraryStatus;
     private Boolean financeStatus;
     private Boolean registrarStatus;
@@ -28,4 +24,8 @@ public class Clearance {
     private Boolean advisorStatus;
     private Boolean facultyStatus;
     private Boolean isCleared;
+
+    @ManyToOne
+    @JoinColumn(name = "student_fk")
+    private Student student;
 }

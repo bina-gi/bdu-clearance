@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ClearanceService {
     List<Clearance> getAllClearances();
-    void requestClearance(Clearance clearance);
+    void createClearance(Clearance clearance);
     String deleteClearance(Long clearanceId);
     Clearance updateLibraryStatus(Clearance clearance,Long clearanceId);
     Clearance updateFinanceStatus(Clearance clearance,Long clearanceId);
