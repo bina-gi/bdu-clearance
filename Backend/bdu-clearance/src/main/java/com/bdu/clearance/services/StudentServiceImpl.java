@@ -42,31 +42,22 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student updateStudent(Student updatedStudentData,Long id){
-        Optional<Student> studentOptional = studentRepository.findById(id);
+        Student savedStudent=studentRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Student not found"));
 
-        if (studentOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student with ID " + id + " not found.");
-        }
-            Student existingStudent = studentOptional.get();
+        updatedStudentData.setId(id);
+        savedStudent=studentRepository.save(updatedStudentData);
 
-        existingStudent.setStudentId(updatedStudentData.getStudentId());
-        existingStudent.setFirstName(updatedStudentData.getFirstName());
-        existingStudent.setMiddleName(updatedStudentData.getMiddleName());
-        existingStudent.setLastName(updatedStudentData.getLastName());
-        existingStudent.setInstitute(updatedStudentData.getInstitute());
-        existingStudent.setFaculty(updatedStudentData.getFaculty());
-        existingStudent.setAdvisor(updatedStudentData.getAdvisor());
-        existingStudent.setYear(updatedStudentData.getYear());
-        existingStudent.setIsGraduated(updatedStudentData.getIsGraduated());
-
-        return studentRepository.save(existingStudent);
+        return savedStudent;
     }
 
     @Override
     public Student getStudent(String studentId) {
         List<Student> allStudents=studentRepository.findAll();
-        Optional<Student> optionalStudent=allStudents.stream().filter(s->s.getStudentId()!=null && s.getStudentId().equals(studentId))
+        Optional<Student> optionalStudent=allStudents.stream()
+                .filter(s->s.getStudentId()!=null && s.getStudentId().equals(studentId))
                 .findFirst();
+
         if(optionalStudent.isPresent()){
             Student foundStudent=optionalStudent.get();
             return foundStudent;

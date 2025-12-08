@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* Custom theme colors */
+@theme {
+  --color-light: #e7f0fa;
+  --color-sky: #7ba4d0;
+  --color-blueish: #2e5e99;
+  --color-navy: #0d2440;
+  --color-lightgray: #202224;
+}
+
+.active {
+  @apply bg-navy border-l-4 border-blueish text-light;
+}
+body {
+  @apply text-gray-800 bg-gray-100 max-w-dvw;
+}
