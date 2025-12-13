@@ -22,13 +22,12 @@ public class Clearance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ========= Clearance Metadata =========
+    //  Clearance Metadata 
     private int academicYear;
     private int yearOfStudy;
     private int semester;
-    private String clearanceReason;
+    private String reason;
 
-    private boolean isEligibleForClearance;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -36,50 +35,50 @@ public class Clearance {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    // ========= Library =========
+    //  Library 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus library = ClearanceStatus.PENDING;
     private String libraryStaffId;
 
-    // ========= Cafeteria =========
+    //  Cafeteria 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus cafeteria = ClearanceStatus.PENDING;
     private String cafeteriaStaffId;
 
-    // ========= Dormitory =========
+    // Dormitory 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus dormitory = ClearanceStatus.PENDING;
     private String dormitoryStaffId;
 
-    // ========= Registrar =========
+    // Registrar 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus registrar = ClearanceStatus.PENDING;
     private String registrarStaffId;
 
-    // ========= Store =========
+    // Store 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus store = ClearanceStatus.PENDING;
     private String storeStaffId;
 
-    // ========= Advisor =========
+    //  Advisor 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus advisor = ClearanceStatus.PENDING;
     private String advisorStaffId;
 
-    // ========= Faculty =========
+    // Faculty 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus faculty = ClearanceStatus.PENDING;
     private String facultyStaffId;
 
-    // ========= Finance =========
+    // Finance 
     @Enumerated(EnumType.STRING)
     private ClearanceStatus finance = ClearanceStatus.PENDING;
     private String financeStaffId;
 
-    // Final result of this clearance record
-    private Boolean cleared;
+    // Final result of the clearance record
+    private Boolean isCleared;
 
-    // ========= RELATIONS =========
+    // Relation
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_fk")
     private Student student;
