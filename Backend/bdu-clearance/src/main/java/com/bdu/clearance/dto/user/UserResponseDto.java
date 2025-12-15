@@ -1,7 +1,5 @@
 package com.bdu.clearance.dto.user;
 
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.UserRole;
 import lombok.Data;
 
 @Data

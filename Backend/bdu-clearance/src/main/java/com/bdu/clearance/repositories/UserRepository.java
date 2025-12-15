@@ -1,8 +1,6 @@
 package com.bdu.clearance.repositories;
 
 import com.bdu.clearance.models.Users;
-import com.bdu.clearance.enums.UserRole;
-import com.bdu.clearance.enums.Campus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

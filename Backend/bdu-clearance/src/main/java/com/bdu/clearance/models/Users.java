@@ -1,35 +1,58 @@
 package com.bdu.clearance.models;
 
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users {
+public class Users{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true,nullable = false)
+    @NotBlank
+    @Column(unique = true, nullable = false)
     private String userId;
 
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String middleName;
+
+    @NotBlank
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private Campus campus;
+    @Column(nullable = false)
+    private Boolean isActive = true;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
-    private Boolean isActive=true;
+    @NotBlank
     private String password;
+    //=== Relations ===
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizational_unit_id")
+    private OrganizationalUnit organizationalUnit;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Student student;
+
+    @OneToMany(mappedBy = "advisor", fetch = FetchType.LAZY)
+    private List<Student> advisedStudents;
+
+    @OneToMany(mappedBy = "issuedBy", fetch = FetchType.LAZY)
+    private List<Property> issuedProperties;
+
+    @OneToMany(mappedBy = "approvedBy", fetch = FetchType.LAZY)
+    private List<ClearanceApproval> approvedClearances;
 }

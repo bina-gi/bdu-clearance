@@ -2,8 +2,6 @@ package com.bdu.clearance.services;
 
 import com.bdu.clearance.dto.user.UserRequestDto;
 import com.bdu.clearance.dto.user.UserResponseDto;
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.UserRole;
 
 import java.util.List;
 

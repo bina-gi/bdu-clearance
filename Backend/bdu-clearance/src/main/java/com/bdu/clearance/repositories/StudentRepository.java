@@ -1,8 +1,5 @@
 package com.bdu.clearance.repositories;
 
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.Department;
-import com.bdu.clearance.enums.Faculty;
 import com.bdu.clearance.enums.StudentStatus;
 import com.bdu.clearance.models.Student;
 import org.springframework.data.jpa.repository.JpaRepository;

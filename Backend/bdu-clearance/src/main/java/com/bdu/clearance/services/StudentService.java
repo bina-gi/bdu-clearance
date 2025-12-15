@@ -2,11 +2,7 @@ package com.bdu.clearance.services;
 
 import com.bdu.clearance.dto.student.StudentRequestDto;
 import com.bdu.clearance.dto.student.StudentResponseDto;
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.Department;
-import com.bdu.clearance.enums.Faculty;
 import com.bdu.clearance.enums.StudentStatus;
-import com.bdu.clearance.models.Student;
 
 import java.util.List;
 

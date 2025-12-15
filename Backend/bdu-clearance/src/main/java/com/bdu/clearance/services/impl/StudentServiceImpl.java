@@ -2,9 +2,6 @@ package com.bdu.clearance.services.impl;
 
 import com.bdu.clearance.dto.student.StudentRequestDto;
 import com.bdu.clearance.dto.student.StudentResponseDto;
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.Department;
-import com.bdu.clearance.enums.Faculty;
 import com.bdu.clearance.enums.StudentStatus;
 import com.bdu.clearance.exceptions.APIException;
 import com.bdu.clearance.mappers.StudentMapper;
@@ -12,13 +9,9 @@ import com.bdu.clearance.models.Student;
 import com.bdu.clearance.repositories.StudentRepository;
 import com.bdu.clearance.services.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {

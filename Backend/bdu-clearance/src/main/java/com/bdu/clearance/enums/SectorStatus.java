@@ -1,6 +1,6 @@
 package com.bdu.clearance.enums;
 
 public enum SectorStatus {
-    CLEAN,
-    NOT_CLEAN,
+    CLEARED,
+    NOT_CLEARED,
 }

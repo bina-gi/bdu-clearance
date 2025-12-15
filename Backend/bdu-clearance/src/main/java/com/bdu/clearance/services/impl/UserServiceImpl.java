@@ -2,8 +2,6 @@ package com.bdu.clearance.services.impl;
 
 import com.bdu.clearance.dto.user.UserRequestDto;
 import com.bdu.clearance.dto.user.UserResponseDto;
-import com.bdu.clearance.enums.Campus;
-import com.bdu.clearance.enums.UserRole;
 import com.bdu.clearance.exceptions.APIException;
 import com.bdu.clearance.mappers.UserMapper;
 import com.bdu.clearance.models.Users;
@@ -13,7 +11,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
