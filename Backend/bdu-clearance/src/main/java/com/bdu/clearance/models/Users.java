@@ -38,7 +38,7 @@ public class Users{
     //=== Relations ===
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_role_id")
-    private UserRole userRole;
+    private Role userRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_unit_id")

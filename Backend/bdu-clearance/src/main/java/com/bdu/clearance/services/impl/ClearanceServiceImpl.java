@@ -39,11 +39,11 @@ public class ClearanceServiceImpl implements ClearanceService {
 
     @Override
     public List<ClearanceResponseDto> getClearanceByStudentId(String studentId) {
-        List<ClearanceResponseDto> clearances=clearanceRepository.findByStudentId(studentId);
+        List<Clearance> clearances=clearanceRepository.findByStudentId(studentId);
         if(clearances.isEmpty()){
             throw new APIException("There is no clearance");
         }
-        return clearances;
+        return clearanceMapper.toResponse(clearances);
 
     }
 

@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-BduClearanceApplication<bdu-clearance>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.bdu.clearance.BduClearanceApplication",
+      "projectName": "bdu-clearance",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

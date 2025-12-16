@@ -64,23 +64,6 @@ public class StudentServiceImpl implements StudentService {
         return  studentMapper.toResponse(optionalStudent.get());
     }
 
-    @Override
-    public List<StudentResponseDto> getStudentByFaculty(Faculty faculty) {
-        List<Student> facultyStudents=studentRepository.findByFaculty(faculty);
-        if(facultyStudents.isEmpty()){
-            throw  new APIException("Student not found in the faculty");
-        }
-        return  studentMapper.toResponse(facultyStudents);
-    }
-
-    @Override
-    public List<StudentResponseDto> getStudentByDepartment(Department department) {
-        List<Student> departmentStudents=studentRepository.findByDepartment(department);
-        if(departmentStudents.isEmpty()){
-            throw  new APIException("Student not found in the department");
-        }
-        return  studentMapper.toResponse(departmentStudents);
-    }
 
     @Override
     public List<StudentResponseDto> getStudentByAdvisor(String advisorId) {
@@ -93,23 +76,15 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentResponseDto> getStudentByStatus(StudentStatus status) {
-        List<Student> statusStudents=studentRepository.findByStatus(status);
+        List<Student> statusStudents=studentRepository.findByStudentStatus(status);
         if(statusStudents.isEmpty()){
             throw  new APIException("Student not found in this status");
         }
         return  studentMapper.toResponse(statusStudents);
     }
     @Override
-    public List<StudentResponseDto> getStudentByCampus(Campus campus) {
-        List<Student> campusStudents=studentRepository.findByCampus(campus);
-        if(campusStudents.isEmpty()){
-            throw  new APIException("Student not found in this campus");
-        }
-        return  studentMapper.toResponse(campusStudents);
-    }
-    @Override
-    public List<StudentResponseDto> getStudentByYear(int year) {
-        List<Student> yearStudents=studentRepository.findByYear(year);
+    public List<StudentResponseDto> getStudentByYearOfStudy(int year) {
+        List<Student> yearStudents=studentRepository.findByYearOfStudy(year);
         if(yearStudents.isEmpty()){
             throw  new APIException("Student not found in this campus");
         }
@@ -120,3 +95,29 @@ public class StudentServiceImpl implements StudentService {
 
 
 }
+
+//    @Override
+//    public List<StudentResponseDto> getStudentByCampus(Campus campus) {
+//        List<Student> campusStudents=studentRepository.findByCampus(campus);
+//        if(campusStudents.isEmpty()){
+//            throw  new APIException("Student not found in this campus");
+//        }
+//        return  studentMapper.toResponse(campusStudents);
+//    }
+//    @Override
+//    public List<StudentResponseDto> getStudentByFaculty(Faculty faculty) {
+//        List<Student> facultyStudents=studentRepository.findByFaculty(faculty);
+//        if(facultyStudents.isEmpty()){
+//            throw  new APIException("Student not found in the faculty");
+//        }
+//        return  studentMapper.toResponse(facultyStudents);
+//    }
+
+//    @Override
+//    public List<StudentResponseDto> getStudentByDepartment(Department department) {
+//        List<Student> departmentStudents=studentRepository.findByDepartment(department);
+//        if(departmentStudents.isEmpty()){
+//            throw  new APIException("Student not found in the department");
+//        }
+//        return  studentMapper.toResponse(departmentStudents);
+//    }

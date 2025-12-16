@@ -4,12 +4,24 @@ import lombok.Data;
 
 @Data
 public class UserResponseDto {
-    private int id;
+
+    private Long id;
     private String userId;
+
     private String firstName;
     private String middleName;
     private String lastName;
-    private Campus campus;
-    private UserRole role;
+
     private Boolean isActive;
+
+    // Role info
+    private Long roleId;
+    private String roleName;
+
+    // Organizational Unit info
+    private Long organizationalUnitId;
+    private String organizationalUnitName;
+
+    // Derived field
+    private Boolean isStudent;
 }

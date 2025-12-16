@@ -1,26 +1,26 @@
 package com.bdu.clearance.dto.student;
 
-import com.bdu.clearance.enums.*;
+import com.bdu.clearance.enums.StudentStatus;
 import lombok.Data;
 
 @Data
 public class StudentResponseDto {
 
     private Long id;
-
-    private String userId;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private Campus campus;
-    private UserRole role;
-    private Boolean isActive;
-
-    private Faculty faculty;
-    private Department department;
-    private String advisor;
-    private int year;
-
+    private Long yearOfStudy;
     private StudentStatus studentStatus;
-    private boolean isEligibleForClearance;
+
+    // User info
+    private Long userId;
+    private String studentId;   // user.userId
+    private String fullName;
+
+    // Advisor
+    private Long advisorId;
+    private String advisorName;
+
+    //
+    private Integer clearanceCount;
+    private Integer propertyCount;
+    private Integer lostCardReportCount;
 }

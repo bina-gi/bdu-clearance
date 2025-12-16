@@ -22,6 +22,7 @@ public class OrganizationalUnitType {
     @NotBlank
     private String organizationType;
     // Relations
-    @OneToMany(mappedBy = "organizational_unit_type", cascade = CascadeType.DETACH, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OrganizationalUnit> organizationalUnit;
+    @OneToMany(mappedBy = "organizationalUnitType", fetch = FetchType.LAZY)
+    private List<OrganizationalUnit> organizationalUnits;
+
 }
