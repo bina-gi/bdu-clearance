@@ -35,11 +35,17 @@ public class OrganizationalUnit {
     @NotBlank
     private String organizationName;
 
-    //==RELATIONS==
+    // ==RELATIONS==
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_type_id")
     private OrganizationalUnitType organizationalUnitType;
 
-    @OneToMany(mappedBy = "organizationalUnit",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
     private List<ClearanceApproval> clearanceApprovals;
+
+    @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
+    private List<Users> users;
+
+    @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
+    private List<Property> properties;
 }

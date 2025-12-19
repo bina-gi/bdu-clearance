@@ -16,6 +16,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "userRole", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
     @Mapping(target = "student", ignore = true)
@@ -25,14 +26,23 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     Users toEntity(UserRequestDto dto);
 
+    @Mapping(source = "userRole.id", target = "roleId")
+    @Mapping(source = "userRole.roleName", target = "roleName")
+    @Mapping(source = "organizationalUnit.id", target = "organizationalUnitId")
+    @Mapping(source = "organizationalUnit.organizationName", target = "organizationalUnitName")
+    @Mapping(target = "isStudent", expression = "java(user.getStudent() != null)")
     UserResponseDto toResponse(Users user);
 
     List<UserResponseDto> toResponse(List<Users> users);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "userRole", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
+    @Mapping(target = "student", ignore = true)
+    @Mapping(target = "advisedStudents", ignore = true)
+    @Mapping(target = "issuedProperties", ignore = true)
+    @Mapping(target = "approvedClearances", ignore = true)
     void updateEntityFromDto(UserRequestDto userDto, @MappingTarget Users existingUser);
 }

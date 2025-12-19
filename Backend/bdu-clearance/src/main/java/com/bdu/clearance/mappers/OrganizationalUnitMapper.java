@@ -18,6 +18,8 @@ public interface OrganizationalUnitMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "organizationalUnitType", ignore = true)
     @Mapping(target = "clearanceApprovals", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "properties", ignore = true)
     OrganizationalUnit toEntity(OrganizationalUnitRequestDto dto);
 
     @Mapping(source = "organizationalUnitType.id", target = "organizationalUnitTypeId")
@@ -30,8 +32,9 @@ public interface OrganizationalUnitMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "organizationalUnitType", ignore = true)
     @Mapping(target = "clearanceApprovals", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "properties", ignore = true)
     void updateEntityFromDto(
             OrganizationalUnitRequestDto dto,
-            @MappingTarget OrganizationalUnit existingEntity
-    );
+            @MappingTarget OrganizationalUnit existingEntity);
 }

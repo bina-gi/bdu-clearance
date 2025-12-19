@@ -23,14 +23,14 @@ public class Role {
 
     @ToString.Exclude
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, name = "role_name")
+    @Column(length = 20, name = "role_name", unique = true)
     private UserRole roleName;
 
     public Role(UserRole roleName) {
         this.roleName = roleName;
     }
 
-    //    Relations
-    @OneToMany(mappedBy = "userRole", cascade = CascadeType.DETACH, orphanRemoval = true, fetch = FetchType.LAZY)
+    // Relations
+    @OneToMany(mappedBy = "userRole", cascade = CascadeType.DETACH, orphanRemoval = false, fetch = FetchType.LAZY)
     private List<Users> users;
 }

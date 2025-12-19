@@ -9,9 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student,Long> {
-    Optional<Student> findByUserId(String studentId);
-    List<Student> findByAdvisor(String advisorId);
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    Optional<Student> findByUserUserId(String studentId);
+
+    Optional<Student> findByUserId(Long userId);
+
+    List<Student> findByAdvisorId(Long advisorId);
+
     List<Student> findByYearOfStudy(int year);
+
     List<Student> findByStudentStatus(StudentStatus status);
 }

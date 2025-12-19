@@ -23,4 +23,7 @@ public class PropertyRequestDto {
 
     @NotNull(message = "Organizational Unit ID is required")
     private Long organizationalUnitId;
+
+    @NotNull(message = "Issued By User ID is required")
+    private Long issuedByUserId;
 }

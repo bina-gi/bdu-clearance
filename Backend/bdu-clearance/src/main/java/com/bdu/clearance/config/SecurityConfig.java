@@ -2,9 +2,9 @@ package com.bdu.clearance.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,19 +20,17 @@ public class SecurityConfig {
                 // Disable CSRF for REST APIs
                 .csrf(csrf -> csrf.disable())
 
-                // Authorize requests
+                // Stateless session - no session creation
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Authorize requests - permit all for development
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers(
-                                "/api/public/**"
-                        ).permitAll()
+                        .anyRequest().permitAll())
 
-                        // Any other request must be authenticated
-                        .anyRequest().authenticated()
-                )
-
-                // Optional: disable default login form
-                .httpBasic(Customizer.withDefaults());
+                // Disable form login and HTTP basic (stops password generation)
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable());
 
         return http.build();
     }
