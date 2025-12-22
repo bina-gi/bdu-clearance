@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "lost_cards_report")
 @Data
@@ -24,9 +26,17 @@ public class LostCardReport {
     private String proofDocUrl;
 
     @Enumerated(EnumType.STRING)
-    private ApprovalStatus status;
+    private ApprovalStatus status = ApprovalStatus.PENDING;
 
+    private LocalDateTime reportDate;
+    private LocalDateTime processedDate;
+
+    // Relations
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "processed_by_user_id")
+    private Users processedBy;
 }

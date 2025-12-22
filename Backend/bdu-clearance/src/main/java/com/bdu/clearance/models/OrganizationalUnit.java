@@ -35,12 +35,22 @@ public class OrganizationalUnit {
     @NotBlank
     private String organizationName;
 
+    /** Legacy string-based parent reference (for backward compatibility) */
     private String parentOrganizationId;
 
     // ==RELATIONS==
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_type_id")
     private OrganizationalUnitType organizationalUnitType;
+
+    /** Self-referential parent relationship for proper hierarchy traversal */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private OrganizationalUnit parent;
+
+    /** Child organizational units */
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<OrganizationalUnit> children;
 
     @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
     private List<ClearanceApproval> clearanceApprovals;

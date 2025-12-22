@@ -93,6 +93,38 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    public List<PropertyResponseDto> getOutstandingByOrganizationalUnit(Long orgId) {
+        return propertyMapper.toResponse(
+                propertyRepository.findByBorrowStatusAndOrganizationalUnitId(
+                        com.bdu.clearance.enums.BorrowStatus.BORROWED, orgId));
+    }
+
+    @Override
+    public List<PropertyResponseDto> getOutstandingByStudentId(Long studentId) {
+        return propertyMapper.toResponse(
+                propertyRepository.findByStudentIdAndBorrowStatus(
+                        studentId, com.bdu.clearance.enums.BorrowStatus.BORROWED));
+    }
+
+    @Override
+    public void markAsReturned(Long propertyId, Long returnedToUserId, String remarks) {
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new APIException("Property not found with id: " + propertyId));
+
+        if (property.getBorrowStatus() == com.bdu.clearance.enums.BorrowStatus.RETURNED) {
+            throw new APIException("Property has already been returned");
+        }
+
+        Users returnedTo = userRepository.findById(returnedToUserId)
+                .orElseThrow(() -> new APIException("User not found with id: " + returnedToUserId));
+
+        property.setBorrowStatus(com.bdu.clearance.enums.BorrowStatus.RETURNED);
+        property.setReturnDate(java.time.LocalDateTime.now());
+        property.setReturnedTo(returnedTo);
+        propertyRepository.save(property);
+    }
+
+    @Override
     public void deleteProperty(Long id) {
         if (!propertyRepository.existsById(id)) {
             throw new APIException("Property not found with id: " + id);

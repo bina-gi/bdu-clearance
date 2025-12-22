@@ -19,14 +19,18 @@ public interface ClearanceMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approvals", ignore = true)
     @Mapping(target = "student", ignore = true)
-    @Mapping(target = "isCleared", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "requestDate", ignore = true)
+    @Mapping(target = "completionDate", ignore = true)
     @Mapping(source = "clearanceReason", target = "reason")
     Clearance toEntity(StudentClearanceRequestDto dto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approvals", ignore = true)
     @Mapping(target = "student", ignore = true)
-    @Mapping(target = "isCleared", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "requestDate", ignore = true)
+    @Mapping(target = "completionDate", ignore = true)
     Clearance toEntity(ClearanceRequestDto dto);
 
     @Mapping(source = "student.id", target = "studentId")
@@ -49,7 +53,9 @@ public interface ClearanceMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approvals", ignore = true)
     @Mapping(target = "student", ignore = true)
-    @Mapping(target = "isCleared", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "requestDate", ignore = true)
+    @Mapping(target = "completionDate", ignore = true)
     @Mapping(source = "clearanceReason", target = "reason")
     void updateEntityFromDto(StudentClearanceRequestDto clearanceDto, @MappingTarget Clearance existingClearance);
 
@@ -57,6 +63,8 @@ public interface ClearanceMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approvals", ignore = true)
     @Mapping(target = "student", ignore = true)
-    @Mapping(target = "isCleared", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "requestDate", ignore = true)
+    @Mapping(target = "completionDate", ignore = true)
     void updateEntityFromDto(ClearanceRequestDto clearanceDto, @MappingTarget Clearance existingClearance);
 }

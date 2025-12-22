@@ -21,8 +21,14 @@ public class OrganizationalUnitType {
 
     @NotBlank
     private String organizationType;
+
+    /**
+     * Hierarchy level for ordering (1=Campus, 2=Faculty, 3=Department, 4=Program).
+     * Lower numbers are higher in the hierarchy.
+     */
+    private Integer hierarchyLevel;
+
     // Relations
     @OneToMany(mappedBy = "organizationalUnitType", fetch = FetchType.LAZY)
     private List<OrganizationalUnit> organizationalUnits;
-
 }

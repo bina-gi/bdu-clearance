@@ -14,6 +14,8 @@ public interface ClearanceApprovalService {
 
     List<ClearanceApprovalResponseDto> getClearanceApprovalsByClearanceId(Long clearanceId);
 
+    List<ClearanceApprovalResponseDto> getPendingByOrganizationalUnit(Long orgId);
+
     void updateClearanceApproval(Long id, ClearanceApprovalRequestDto requestDto);
 
     void deleteClearanceApproval(Long id);

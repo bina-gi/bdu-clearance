@@ -1,10 +1,12 @@
 package com.bdu.clearance.models;
 
+import com.bdu.clearance.enums.BorrowStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "property")
@@ -21,6 +23,13 @@ public class Property {
     private String itemName;
     private Integer itemQuantity;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BorrowStatus borrowStatus = BorrowStatus.BORROWED;
+
+    private LocalDateTime borrowDate;
+    private LocalDateTime returnDate;
+
     // Relations
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
@@ -31,8 +40,10 @@ public class Property {
     private Users issuedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "returned_to_user_id")
+    private Users returnedTo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_unit_id")
     private OrganizationalUnit organizationalUnit;
-
-
 }

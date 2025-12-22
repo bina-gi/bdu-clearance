@@ -92,6 +92,12 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
     }
 
     @Override
+    public List<ClearanceApprovalResponseDto> getPendingByOrganizationalUnit(Long orgId) {
+        return clearanceApprovalMapper.toResponse(
+                clearanceApprovalRepository.findPendingByOrganizationalUnit(orgId));
+    }
+
+    @Override
     public void deleteClearanceApproval(Long id) {
         if (!clearanceApprovalRepository.existsById(id)) {
             throw new APIException("Clearance Approval not found with id: " + id);
