@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users{
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Users{
 
     @NotBlank
     private String password;
-    //=== Relations ===
+    // === Relations ===
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_role_id")
     private Role userRole;

@@ -35,6 +35,8 @@ public class OrganizationalUnit {
     @NotBlank
     private String organizationName;
 
+    private String parentOrganizationId;
+
     // ==RELATIONS==
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_type_id")
