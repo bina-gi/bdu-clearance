@@ -32,66 +32,65 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void createUser(UserRequestDto newUser){
-        
+    public void createUser(UserRequestDto newUser) {
+
         Role role = roleRepository
-        .findById(newUser.getRoleId())
-        .orElseThrow(() -> new APIException("Role not found with id: " + newUser.getRoleId()));
-        
-        OrganizationalUnit organizationalUnit =organizationalUnitRepository
-        .findById(newUser.getOrganizationalUnitId())
-        .orElseThrow(() -> new APIException(
-            "Organizational Unit not found with id: " + newUser.getOrganizationalUnitId()
-        ));
-        
-        Users user=userMapper.toEntity(newUser);
+                .findById(newUser.getRoleId())
+                .orElseThrow(() -> new APIException("Role not found with id: " + newUser.getRoleId()));
+
+        OrganizationalUnit organizationalUnit = organizationalUnitRepository
+                .findById(newUser.getOrganizationalUnitId())
+                .orElseThrow(() -> new APIException(
+                        "Organizational Unit not found with id: " + newUser.getOrganizationalUnitId()));
+
+        Users user = userMapper.toEntity(newUser);
         user.setUserRole(role);
         user.setOrganizationalUnit(organizationalUnit);
 
-        String rawPassword=user.getLastName()+user.getUserId();
+        String rawPassword = user.getLastName() + user.getUserId();
         user.setPassword(passwordEncoder.encode(rawPassword));
 
-        System.out.println("Role: " + user.getUserRole());
-        System.out.println("OrgUnit: " + user.getOrganizationalUnit());
+        // System.out.println("Role: " + user.getUserRole());
+        // System.out.println("OrgUnit: " + user.getOrganizationalUnit());
 
         if (user.getIsActive() == null) {
-        user.setIsActive(true);
+            user.setIsActive(true);
         }
 
         userRepository.save(user);
     }
 
     @Override
-    public List<UserResponseDto> getAllUsers(){
-        List<Users> allUsers=userRepository.findAll();
-        return  userMapper.toResponse(allUsers);
+    public List<UserResponseDto> getAllUsers() {
+        List<Users> allUsers = userRepository.findAll();
+        return userMapper.toResponse(allUsers);
     }
 
     @Override
-    public UserResponseDto getUserById(String userId){
-        Users user=userRepository.findByUserId(userId)
-                .orElseThrow(()->new APIException("User not found with Id: "+userId));
+    public UserResponseDto getUserById(String userId) {
+        Users user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new APIException("User not found with Id: " + userId));
 
-        return  userMapper.toResponse(user);
+        return userMapper.toResponse(user);
     }
 
     @Override
-    public List<UserResponseDto> getUsersByStatus(Boolean isActive){
-        List<Users> statusUsers=userRepository.findByIsActive(isActive);
+    public List<UserResponseDto> getUsersByStatus(Boolean isActive) {
+        List<Users> statusUsers = userRepository.findByIsActive(isActive);
         return userMapper.toResponse(statusUsers);
     }
 
     @Override
     @Transactional
-    public void deleteUser(String userId){
-        Users user=userRepository.findByUserId(userId)
-        .orElseThrow(()->new APIException("User not found with Id: "+userId)); 
+    public void deleteUser(String userId) {
+        Users user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new APIException("User not found with Id: " + userId));
         userRepository.delete(user);
     }
 
     @Override
     @Transactional
-    public void updateUser(UserRequestDto userDto, Long id){
+    public void updateUser(UserRequestDto userDto, Long id) {
 
         Users existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new APIException("User not found with Id: " + id));
@@ -102,29 +101,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassword(String userId){
-        Users user=userRepository.findByUserId(userId).orElseThrow(()->new APIException("User not found with Id: "+userId));
-        String encodedPassword=passwordEncoder.encode(user.getLastName()+user.getUserId());
+    public void resetPassword(String userId) {
+        Users user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new APIException("User not found with Id: " + userId));
+        String encodedPassword = passwordEncoder.encode(user.getLastName() + user.getUserId());
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
-//    @Override
-//    public List<UserResponseDto> getUsersByRole(UserRole role){
-//        List<Users> roleUsers=userRepository.findByRole(role);
-//        if(roleUsers.isEmpty()){
-//            throw new APIException("Campus not found with the Campus Name "+role);
-//        }
-//        return userMapper.toResponse(roleUsers);
-//    }
-//    @Override
-//
-//    public List<UserResponseDto> getUsersByCampus(Campus campus){
-//        List<Users> campusUsers=userRepository.findByCampus(campus);
-//
-//        if(campusUsers.isEmpty()){
-//            throw new APIException("Campus not found with the Campus Name "+campus);
-//        }
-//        return userMapper.toResponse(campusUsers);
-//    }
+    // @Override
+    // public List<UserResponseDto> getUsersByRole(UserRole role){
+    // List<Users> roleUsers=userRepository.findByRole(role);
+    // if(roleUsers.isEmpty()){
+    // throw new APIException("Campus not found with the Campus Name "+role);
+    // }
+    // return userMapper.toResponse(roleUsers);
+    // }
+    // @Override
+    //
+    // public List<UserResponseDto> getUsersByCampus(Campus campus){
+    // List<Users> campusUsers=userRepository.findByCampus(campus);
+    //
+    // if(campusUsers.isEmpty()){
+    // throw new APIException("Campus not found with the Campus Name "+campus);
+    // }
+    // return userMapper.toResponse(campusUsers);
+    // }
 }

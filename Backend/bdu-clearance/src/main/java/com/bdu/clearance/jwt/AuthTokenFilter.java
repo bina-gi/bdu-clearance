@@ -59,6 +59,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.error("Authentication error: {}", e.getMessage());
+            request.setAttribute("ACTION_TOKEN_ERROR", e.getMessage());
         }
 
         filterChain.doFilter(request, response);

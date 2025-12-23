@@ -40,6 +40,11 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
         body.put("path", request.getRequestURI());
         body.put("timestamp", Instant.now().toString());
 
+        String tokenError = (String) request.getAttribute("ACTION_TOKEN_ERROR");
+        if (tokenError != null) {
+            body.put("details", tokenError);
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
         response.flushBuffer();

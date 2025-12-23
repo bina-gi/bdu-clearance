@@ -2,7 +2,6 @@ package com.bdu.clearance.config;
 
 import com.bdu.clearance.jwt.AuthEntryPointJwt;
 import com.bdu.clearance.jwt.AuthTokenFilter;
-import com.bdu.clearance.security.AccessKeyAuthFilter;
 import com.bdu.clearance.services.impl.UserDetailsServiceImpl;
 
 import org.springframework.context.annotation.Bean;
@@ -24,16 +23,13 @@ public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final AuthTokenFilter authTokenFilter;
-    private final AccessKeyAuthFilter accessKeyAuthFilter;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService,
             AuthEntryPointJwt unauthorizedHandler,
-            AuthTokenFilter authTokenFilter,
-            AccessKeyAuthFilter accessKeyAuthFilter) {
+            AuthTokenFilter authTokenFilter) {
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
         this.authTokenFilter = authTokenFilter;
-        this.accessKeyAuthFilter = accessKeyAuthFilter;
     }
 
     @Bean
@@ -51,9 +47,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 
-        // Add API key filter first, then JWT filter
-        http.addFilterBefore(accessKeyAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(authTokenFilter, AccessKeyAuthFilter.class);
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -3,6 +3,7 @@ package com.bdu.clearance.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -44,15 +45,23 @@ public class Users {
     @JoinColumn(name = "organizational_unit_id")
     private OrganizationalUnit organizationalUnit;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Student student;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "advisor", fetch = FetchType.LAZY)
     private List<Student> advisedStudents;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "issuedBy", fetch = FetchType.LAZY)
     private List<Property> issuedProperties;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "approvedBy", fetch = FetchType.LAZY)
     private List<ClearanceApproval> approvedClearances;
 }

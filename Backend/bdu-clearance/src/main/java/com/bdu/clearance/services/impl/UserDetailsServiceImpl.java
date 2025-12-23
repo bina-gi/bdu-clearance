@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import com.bdu.clearance.models.Users;
 import com.bdu.clearance.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository; // repository for Users entity

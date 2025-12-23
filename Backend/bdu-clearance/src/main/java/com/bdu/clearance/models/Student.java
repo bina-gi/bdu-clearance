@@ -3,6 +3,8 @@ package com.bdu.clearance.models;
 import java.util.List;
 
 import com.bdu.clearance.enums.StudentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.ToString;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,12 +28,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student{
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     private Long yearOfStudy;
 
@@ -39,20 +40,30 @@ public class Student{
     private StudentStatus studentStatus;
 
     // RELATIONS
+    @ToString.Exclude
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advisor_id")
     private Users advisor;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Clearance> clearances;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Property> properties;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LostCardReport> lostCardReports;
 }

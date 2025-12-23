@@ -1,6 +1,7 @@
 package com.bdu.clearance.models;
 
 import com.bdu.clearance.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,8 @@ public class Role {
     }
 
     // Relations
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "userRole", cascade = CascadeType.DETACH, orphanRemoval = false, fetch = FetchType.LAZY)
     private List<Users> users;
 }

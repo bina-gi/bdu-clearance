@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -22,13 +24,9 @@ public class OrganizationalUnitType {
     @NotBlank
     private String organizationType;
 
-    /**
-     * Hierarchy level for ordering (1=Campus, 2=Faculty, 3=Department, 4=Program).
-     * Lower numbers are higher in the hierarchy.
-     */
-    private Integer hierarchyLevel;
-
     // Relations
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "organizationalUnitType", fetch = FetchType.LAZY)
     private List<OrganizationalUnit> organizationalUnits;
 }

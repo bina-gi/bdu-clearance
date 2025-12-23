@@ -16,6 +16,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "organizational_unit")
@@ -35,7 +37,6 @@ public class OrganizationalUnit {
     @NotBlank
     private String organizationName;
 
-    /** Legacy string-based parent reference (for backward compatibility) */
     private String parentOrganizationId;
 
     // ==RELATIONS==
@@ -49,15 +50,23 @@ public class OrganizationalUnit {
     private OrganizationalUnit parent;
 
     /** Child organizational units */
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<OrganizationalUnit> children;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
     private List<ClearanceApproval> clearanceApprovals;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
     private List<Users> users;
 
+    @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "organizationalUnit", fetch = FetchType.LAZY)
     private List<Property> properties;
 }

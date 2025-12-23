@@ -4,8 +4,6 @@ import com.bdu.clearance.config.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,7 +16,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    // private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     private final JwtProperties jwtProperties;
     private final SecretKey secretKey;
@@ -60,25 +58,12 @@ public class JwtUtils {
     }
 
     public boolean validateJwtToken(String token) {
-        try {
-            Jwts
-                    .parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token);
-            return true;
-        } catch (ExpiredJwtException e) {
-            logger.error("JWT expired: {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            logger.error("JWT malformed: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            logger.error("JWT unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            logger.error("JWT claims empty: {}", e.getMessage());
-        } catch (Exception e) {
-            logger.error("JWT validation error: {}", e.getMessage());
-        }
-        return false;
+        Jwts
+                .parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token);
+        return true;
     }
 
     public String getUserNameFromJwtToken(String token) {
