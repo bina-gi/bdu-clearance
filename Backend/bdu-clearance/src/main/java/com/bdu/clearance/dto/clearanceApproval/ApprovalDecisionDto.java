@@ -14,5 +14,8 @@ public class ApprovalDecisionDto {
     @NotNull(message = "Decision is required")
     private ApprovalStatus decision;
 
+    @NotNull(message = "Approved By User ID is required")
+    private Long approvedByUserId;
+
     private String remarks;
 }

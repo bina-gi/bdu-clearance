@@ -34,7 +34,7 @@ public class ClearanceController {
         return ResponseEntity.ok(clearanceService.getAllClearances());
     }
 
-    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN', 'STAFF', 'ADVISOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<ClearanceResponseDto>> getClearanceByStudentId(@PathVariable String studentId) {
         return ResponseEntity.ok(clearanceService.getClearanceByStudentId(studentId));

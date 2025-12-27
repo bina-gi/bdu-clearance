@@ -1,5 +1,12 @@
 package com.bdu.clearance.services.impl;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bdu.clearance.dto.clearance.ClearanceResponseDto;
 import com.bdu.clearance.dto.clearance.StudentClearanceRequestDto;
 import com.bdu.clearance.enums.ClearanceStatus;
@@ -11,14 +18,9 @@ import com.bdu.clearance.repositories.ClearanceRepository;
 import com.bdu.clearance.repositories.StudentRepository;
 import com.bdu.clearance.services.ClearanceRoutingService;
 import com.bdu.clearance.services.ClearanceService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class ClearanceServiceImpl implements ClearanceService {
         // Set initial status and timestamp
         newClearance.setStatus(ClearanceStatus.PENDING);
         newClearance.setRequestDate(LocalDateTime.now());
-
+        
         // Save clearance first to get ID
         Clearance savedClearance = clearanceRepository.save(newClearance);
 

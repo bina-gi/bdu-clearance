@@ -46,6 +46,10 @@ public class PropertyServiceImpl implements PropertyService {
                         "User (Issued By) not found with id: " + requestDto.getIssuedByUserId()));
         property.setIssuedBy(issuedBy);
 
+        if (property.getBorrowDate() == null) {
+            property.setBorrowDate(java.time.LocalDateTime.now());
+        }
+
         propertyRepository.save(property);
     }
 

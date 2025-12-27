@@ -36,7 +36,7 @@ public class ClearanceApprovalController {
     }
 
     // === READ ===
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getAllClearanceApprovals() {
         return ResponseEntity.ok(clearanceApprovalService.getAllClearanceApprovals());
@@ -55,10 +55,6 @@ public class ClearanceApprovalController {
         return ResponseEntity.ok(clearanceApprovalService.getClearanceApprovalsByClearanceId(clearanceId));
     }
 
-    /**
-     * Get pending approvals for the current user's organizational unit.
-     * Staff dashboard endpoint.
-     */
     @PreAuthorize("hasAnyRole('STAFF', 'ADVISOR')")
     @GetMapping("/pending")
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getPendingForMyOrg(
@@ -72,11 +68,6 @@ public class ClearanceApprovalController {
         return ResponseEntity.ok(clearanceApprovalService.getPendingByOrganizationalUnit(orgId));
     }
 
-    // === PROCESS APPROVAL ===
-    /**
-     * Process an approval decision (approve/reject).
-     * Only staff/advisors from the same organizational unit can approve.
-     */
     @PreAuthorize("hasAnyRole('STAFF', 'ADVISOR')")
     @PutMapping("/{id}/process")
     public ResponseEntity<Void> processApproval(
@@ -91,7 +82,7 @@ public class ClearanceApprovalController {
     }
 
     // === UPDATE ===
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateClearanceApproval(@PathVariable Long id,
             @Valid @RequestBody ClearanceApprovalRequestDto requestDto) {

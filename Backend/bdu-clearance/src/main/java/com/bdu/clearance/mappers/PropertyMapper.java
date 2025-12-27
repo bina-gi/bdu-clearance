@@ -18,6 +18,10 @@ public interface PropertyMapper {
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "issuedBy", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
+    @Mapping(target = "borrowStatus", ignore = true)
+    @Mapping(target = "borrowDate", ignore = true)
+    @Mapping(target = "returnDate", ignore = true)
+    @Mapping(target = "returnedTo", ignore = true)
     Property toEntity(PropertyRequestDto dto);
 
     @Mapping(source = "student.id", target = "studentId")
@@ -35,5 +39,9 @@ public interface PropertyMapper {
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "issuedBy", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
+    @Mapping(target = "borrowStatus", ignore = true)
+    @Mapping(target = "borrowDate", ignore = true)
+    @Mapping(target = "returnDate", ignore = true)
+    @Mapping(target = "returnedTo", ignore = true)
     void updateEntityFromDto(PropertyRequestDto dto, @MappingTarget Property entity);
 }

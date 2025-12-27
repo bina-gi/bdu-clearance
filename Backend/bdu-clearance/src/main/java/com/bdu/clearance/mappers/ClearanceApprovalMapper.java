@@ -18,12 +18,15 @@ public interface ClearanceApprovalMapper {
     @Mapping(target = "clearance", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
     @Mapping(target = "approvedBy", ignore = true)
+    @Mapping(target = "approvalOrder", ignore = true)
+    @Mapping(target = "isRequired", ignore = true)
+    @Mapping(target = "approvalDate", ignore = true)
     ClearanceApproval toEntity(ClearanceApprovalRequestDto dto);
 
     @Mapping(source = "organizationalUnit.id", target = "organizationalUnitId")
     @Mapping(source = "organizationalUnit.organizationName", target = "organizationalUnitName")
     @Mapping(source = "approvedBy.id", target = "approvedByUserId")
-    @Mapping(target = "approvedByName", expression = "java(approval.getApprovedBy().getFirstName() + \" \" + approval.getApprovedBy().getMiddleName() + \" \" + approval.getApprovedBy().getLastName())")
+    @Mapping(target = "approvedByName", expression = "java(approval.getApprovedBy() != null ? approval.getApprovedBy().getFirstName() + \" \" + approval.getApprovedBy().getMiddleName() + \" \" + approval.getApprovedBy().getLastName() : null)")
     ClearanceApprovalResponseDto toResponse(ClearanceApproval approval);
 
     List<ClearanceApprovalResponseDto> toResponse(List<ClearanceApproval> approvals);
@@ -33,5 +36,8 @@ public interface ClearanceApprovalMapper {
     @Mapping(target = "clearance", ignore = true)
     @Mapping(target = "organizationalUnit", ignore = true)
     @Mapping(target = "approvedBy", ignore = true)
+    @Mapping(target = "approvalOrder", ignore = true)
+    @Mapping(target = "isRequired", ignore = true)
+    @Mapping(target = "approvalDate", ignore = true)
     void updateEntityFromDto(ClearanceApprovalRequestDto dto, @MappingTarget ClearanceApproval entity);
 }

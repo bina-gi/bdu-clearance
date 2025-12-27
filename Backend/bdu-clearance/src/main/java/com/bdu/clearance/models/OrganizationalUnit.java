@@ -43,13 +43,12 @@ public class OrganizationalUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizational_type_id")
     private OrganizationalUnitType organizationalUnitType;
-
-    /** Self-referential parent relationship for proper hierarchy traversal */
+    // Parent Organizational Unit
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private OrganizationalUnit parent;
 
-    /** Child organizational units */
+    // Child Organizational Units
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)

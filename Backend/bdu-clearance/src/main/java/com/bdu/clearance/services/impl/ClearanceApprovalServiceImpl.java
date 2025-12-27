@@ -10,9 +10,9 @@ import com.bdu.clearance.models.OrganizationalUnit;
 import com.bdu.clearance.repositories.ClearanceApprovalRepository;
 import com.bdu.clearance.repositories.ClearanceRepository;
 import com.bdu.clearance.repositories.OrganizationalUnitRepository;
-import com.bdu.clearance.repositories.UserRepository;
+// import com.bdu.clearance.repositories.UserRepository;
 import com.bdu.clearance.services.ClearanceApprovalService;
-import com.bdu.clearance.models.Users;
+// import com.bdu.clearance.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
     private final ClearanceApprovalMapper clearanceApprovalMapper;
     private final ClearanceRepository clearanceRepository;
     private final OrganizationalUnitRepository organizationalUnitRepository;
-    private final UserRepository userRepository;
+    // private final UserRepository userRepository;
 
     @Override
     public void createClearanceApproval(ClearanceApprovalRequestDto requestDto) {
@@ -42,10 +42,11 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
                         "Organizational Unit not found with id: " + requestDto.getOrganizationalUnitId()));
         approval.setOrganizationalUnit(orgUnit);
 
-        Users approvedBy = userRepository.findById(requestDto.getApprovedByUserId())
-                .orElseThrow(() -> new APIException(
-                        "User (Approved By) not found with id: " + requestDto.getApprovedByUserId()));
-        approval.setApprovedBy(approvedBy);
+        // Users approvedBy = userRepository.findById(requestDto.getApprovedByUserId())
+        // .orElseThrow(() -> new APIException(
+        // "User (Approved By) not found with id: " +
+        // requestDto.getApprovedByUserId()));
+        // approval.setApprovedBy(approvedBy);
 
         clearanceApprovalRepository.save(approval);
     }
@@ -81,11 +82,16 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
             existingApproval.setOrganizationalUnit(orgUnit);
         }
 
-        if (requestDto.getApprovedByUserId() != null) {
-            Users approvedBy = userRepository.findById(requestDto.getApprovedByUserId())
-                    .orElseThrow(() -> new APIException(
-                            "User (Approved By) not found with id: " + requestDto.getApprovedByUserId()));
-            existingApproval.setApprovedBy(approvedBy);
+        // if (requestDto.getApprovedByUserId() != null) {
+        // Users approvedBy = userRepository.findById(requestDto.getApprovedByUserId())
+        // .orElseThrow(() -> new APIException(
+        // "User (Approved By) not found with id: " +
+        // requestDto.getApprovedByUserId()));
+        // existingApproval.setApprovedBy(approvedBy);
+        // }
+
+        if (existingApproval.getStatus() != com.bdu.clearance.enums.ApprovalStatus.PENDING) {
+            existingApproval.setApprovalDate(java.time.LocalDateTime.now());
         }
 
         clearanceApprovalRepository.save(existingApproval);

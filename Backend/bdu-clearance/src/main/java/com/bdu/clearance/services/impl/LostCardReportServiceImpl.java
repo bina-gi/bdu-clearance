@@ -22,6 +22,7 @@ public class LostCardReportServiceImpl implements LostCardReportService {
     private final LostCardReportRepository lostCardReportRepository;
     private final LostCardReportMapper lostCardReportMapper;
     private final StudentRepository studentRepository;
+    private final com.bdu.clearance.repositories.UserRepository userRepository;
 
     @Override
     public void createLostCardReport(ReportRequestDto requestDto) {
@@ -61,6 +62,21 @@ public class LostCardReportServiceImpl implements LostCardReportService {
         lostCardReportMapper.updateEntityFromDto(requestDto, existingReport);
 
         lostCardReportRepository.save(existingReport);
+    }
+
+    @Override
+    public void processLostCardReport(Long id, ApprovalStatus status, Long processedByUserId) {
+        LostCardReport report = lostCardReportRepository.findById(id)
+                .orElseThrow(() -> new APIException("Lost Card Report not found with id: " + id));
+
+        com.bdu.clearance.models.Users processedBy = userRepository.findById(processedByUserId)
+                .orElseThrow(() -> new APIException("User not found with id: " + processedByUserId));
+
+        report.setStatus(status);
+        report.setProcessedBy(processedBy);
+        report.setProcessedDate(java.time.LocalDateTime.now());
+
+        lostCardReportRepository.save(report);
     }
 
     @Override

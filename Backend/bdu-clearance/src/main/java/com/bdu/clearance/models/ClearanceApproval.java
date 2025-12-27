@@ -51,7 +51,7 @@ public class ClearanceApproval {
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "approved_by")
+    @JoinColumn(name = "approved_by", nullable = true)
     private Users approvedBy;
 
 }

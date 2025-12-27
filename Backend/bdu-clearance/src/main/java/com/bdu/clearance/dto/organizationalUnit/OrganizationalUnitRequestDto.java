@@ -15,4 +15,6 @@ public class OrganizationalUnitRequestDto {
 
     @NotNull(message = "Organizational unit type ID is required")
     private Long organizationalUnitTypeId;
+
+    private String parentOrganizationId;
 }

@@ -6,6 +6,7 @@ import com.bdu.clearance.services.OrganizationalUnitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ public class OrganizationalUnitController {
     private final OrganizationalUnitService organizationalUnitService;
 
     // === CREATE ===
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createOrganizationalUnit(@Valid @RequestBody OrganizationalUnitRequestDto requestDto) {
         organizationalUnitService.createOrganizationalUnit(requestDto);
@@ -26,6 +28,7 @@ public class OrganizationalUnitController {
     }
 
     // === READ ===
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<OrganizationalUnitResponseDto>> getAllOrganizationalUnits() {
         return ResponseEntity.ok(organizationalUnitService.getAllOrganizationalUnits());
@@ -37,6 +40,7 @@ public class OrganizationalUnitController {
     }
 
     // === UPDATE ===
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateOrganizationalUnit(@Valid @RequestBody OrganizationalUnitRequestDto requestDto,
             @PathVariable Long id) {
@@ -45,6 +49,7 @@ public class OrganizationalUnitController {
     }
 
     // === DELETE ===
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrganizationalUnit(@PathVariable Long id) {
         organizationalUnitService.deleteOrganizationalUnit(id);

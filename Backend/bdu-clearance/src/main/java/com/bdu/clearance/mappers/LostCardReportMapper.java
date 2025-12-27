@@ -17,6 +17,9 @@ public interface LostCardReportMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "status", ignore = true) // Set in Service
+    @Mapping(target = "reportDate", ignore = true)
+    @Mapping(target = "processedDate", ignore = true)
+    @Mapping(target = "processedBy", ignore = true)
     LostCardReport toEntity(ReportRequestDto dto);
 
     @Mapping(source = "student.id", target = "studentId")
@@ -29,5 +32,8 @@ public interface LostCardReportMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "student", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "reportDate", ignore = true)
+    @Mapping(target = "processedDate", ignore = true)
+    @Mapping(target = "processedBy", ignore = true)
     void updateEntityFromDto(ReportRequestDto dto, @MappingTarget LostCardReport entity);
 }

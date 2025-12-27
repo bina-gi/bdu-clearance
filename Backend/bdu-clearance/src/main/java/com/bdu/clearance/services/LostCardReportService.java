@@ -16,5 +16,7 @@ public interface LostCardReportService {
 
     void updateLostCardReport(Long id, ReportRequestDto requestDto);
 
+    void processLostCardReport(Long id, com.bdu.clearance.enums.ApprovalStatus status, Long processedByUserId);
+
     void deleteLostCardReport(Long id);
 }

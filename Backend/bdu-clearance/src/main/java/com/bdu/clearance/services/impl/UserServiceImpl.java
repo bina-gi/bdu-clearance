@@ -97,6 +97,20 @@ public class UserServiceImpl implements UserService {
 
         userMapper.updateEntityFromDto(userDto, existingUser);
 
+        if (userDto.getRoleId() != null) {
+            Role role = roleRepository.findById(userDto.getRoleId())
+                    .orElseThrow(() -> new APIException("Role not found with id: " + userDto.getRoleId()));
+            existingUser.setUserRole(role);
+        }
+
+        if (userDto.getOrganizationalUnitId() != null) {
+            OrganizationalUnit organizationalUnit = organizationalUnitRepository
+                    .findById(userDto.getOrganizationalUnitId())
+                    .orElseThrow(() -> new APIException(
+                            "Organizational Unit not found with id: " + userDto.getOrganizationalUnitId()));
+            existingUser.setOrganizationalUnit(organizationalUnit);
+        }
+
         userRepository.save(existingUser);
     }
 

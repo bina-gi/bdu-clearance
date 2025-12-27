@@ -20,6 +20,4 @@ public class ClearanceApprovalRequestDto {
     @NotBlank(message = "Remarks are required")
     private String remarks;
 
-    @NotNull(message = "Approved By User ID is required")
-    private Long approvedByUserId;
 }

@@ -21,82 +21,91 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class OrganizationalUnitServiceImpl implements OrganizationalUnitService {
 
-    private final OrganizationalUnitRepository organizationalUnitRepository;
-    private final OrganizationalUnitTypeRepository organizationalUnitTypeRepository;
-    private final OrganizationalUnitMapper organizationalUnitMapper;
+        private final OrganizationalUnitRepository organizationalUnitRepository;
+        private final OrganizationalUnitTypeRepository organizationalUnitTypeRepository;
+        private final OrganizationalUnitMapper organizationalUnitMapper;
 
-    @Override
-    @Transactional
-    public void createOrganizationalUnit(OrganizationalUnitRequestDto requestDto) {
-        OrganizationalUnitType unitType = organizationalUnitTypeRepository
-                .findById(requestDto.getOrganizationalUnitTypeId())
-                .orElseThrow(() -> new APIException(
-                        "Organizational Unit Type not found with id: "
-                                + requestDto.getOrganizationalUnitTypeId()
-                ));
+        @Override
+        @Transactional
+        public void createOrganizationalUnit(OrganizationalUnitRequestDto requestDto) {
+                OrganizationalUnitType unitType = organizationalUnitTypeRepository
+                                .findById(requestDto.getOrganizationalUnitTypeId())
+                                .orElseThrow(() -> new APIException(
+                                                "Organizational Unit Type not found with id: "
+                                                                + requestDto.getOrganizationalUnitTypeId()));
 
-        OrganizationalUnit organizationalUnit =
-                organizationalUnitMapper.toEntity(requestDto);
+                OrganizationalUnit organizationalUnit = organizationalUnitMapper.toEntity(requestDto);
 
-        organizationalUnit.setOrganizationalUnitType(unitType);
+                if (requestDto.getParentOrganizationId() != null && !requestDto.getParentOrganizationId().isEmpty()) {
+                        OrganizationalUnit parentUnit = organizationalUnitRepository
+                                        .findByOrganizationId(requestDto.getParentOrganizationId())
+                                        .orElseThrow(() -> new APIException(
+                                                        "Parent Organizational Unit not found with id: "
+                                                                        + requestDto.getParentOrganizationId()));
+                        organizationalUnit.setParent(parentUnit);
+                        organizationalUnit.setParentOrganizationId(requestDto.getParentOrganizationId());
+                }
 
-        organizationalUnitRepository.save(organizationalUnit);
-    }
+                organizationalUnit.setOrganizationalUnitType(unitType);
 
-    @Override
-    public List<OrganizationalUnitResponseDto> getAllOrganizationalUnits() {
-        List<OrganizationalUnit> units =
-                organizationalUnitRepository.findAll();
+                organizationalUnitRepository.save(organizationalUnit);
+        }
 
-        return organizationalUnitMapper.toResponse(units);
-    }
+        @Override
+        public List<OrganizationalUnitResponseDto> getAllOrganizationalUnits() {
+                List<OrganizationalUnit> units = organizationalUnitRepository.findAll();
 
-    @Override
-    public OrganizationalUnitResponseDto getOrganizationalUnitById(Long id) {
-        OrganizationalUnit unit = organizationalUnitRepository
-                .findById(id)
-                .orElseThrow(() ->
-                        new APIException("Organizational Unit not found with id: " + id)
-                );
+                return organizationalUnitMapper.toResponse(units);
+        }
 
-        return organizationalUnitMapper.toResponse(unit);
-    }
+        @Override
+        public OrganizationalUnitResponseDto getOrganizationalUnitById(Long id) {
+                OrganizationalUnit unit = organizationalUnitRepository
+                                .findById(id)
+                                .orElseThrow(() -> new APIException("Organizational Unit not found with id: " + id));
 
-    @Override
-    @Transactional
-    public void updateOrganizationalUnit(OrganizationalUnitRequestDto requestDto,Long id) {
-        OrganizationalUnit existingUnit = organizationalUnitRepository
-                .findById(id)
-                .orElseThrow(() ->
-                        new APIException("Organizational Unit not found with id: " + id)
-                );
+                return organizationalUnitMapper.toResponse(unit);
+        }
 
-        OrganizationalUnitType unitType = organizationalUnitTypeRepository
-                .findById(requestDto.getOrganizationalUnitTypeId())
-                .orElseThrow(() -> new APIException(
-                        "Organizational Unit Type not found with id: "
-                                + requestDto.getOrganizationalUnitTypeId()
-                ));
+        @Override
+        @Transactional
+        public void updateOrganizationalUnit(OrganizationalUnitRequestDto requestDto, Long id) {
+                OrganizationalUnit existingUnit = organizationalUnitRepository
+                                .findById(id)
+                                .orElseThrow(() -> new APIException("Organizational Unit not found with id: " + id));
 
-        organizationalUnitMapper.updateEntityFromDto(
-                requestDto,
-                existingUnit
-        );
+                OrganizationalUnitType unitType = organizationalUnitTypeRepository
+                                .findById(requestDto.getOrganizationalUnitTypeId())
+                                .orElseThrow(() -> new APIException(
+                                                "Organizational Unit Type not found with id: "
+                                                                + requestDto.getOrganizationalUnitTypeId()));
 
-        existingUnit.setOrganizationalUnitType(unitType);
+                organizationalUnitMapper.updateEntityFromDto(
+                                requestDto,
+                                existingUnit);
 
-        organizationalUnitRepository.save(existingUnit);
-    }
+                if (requestDto.getParentOrganizationId() != null && !requestDto.getParentOrganizationId().isEmpty()) {
+                        OrganizationalUnit parentUnit = organizationalUnitRepository
+                                        .findByOrganizationId(requestDto.getParentOrganizationId())
+                                        .orElseThrow(() -> new APIException(
+                                                        "Parent Organizational Unit not found with id: "
+                                                                        + requestDto.getParentOrganizationId()));
+                        existingUnit.setParent(parentUnit);
+                        existingUnit.setParentOrganizationId(requestDto.getParentOrganizationId());
+                }
 
-    @Override
-    @Transactional
-    public void deleteOrganizationalUnit(Long id) {
-        OrganizationalUnit unit = organizationalUnitRepository
-                .findById(id)
-                .orElseThrow(() ->
-                        new APIException("Organizational Unit not found with id: " + id)
-                );
+                existingUnit.setOrganizationalUnitType(unitType);
 
-        organizationalUnitRepository.delete(unit);
-    }
+                organizationalUnitRepository.save(existingUnit);
+        }
+
+        @Override
+        @Transactional
+        public void deleteOrganizationalUnit(Long id) {
+                OrganizationalUnit unit = organizationalUnitRepository
+                                .findById(id)
+                                .orElseThrow(() -> new APIException("Organizational Unit not found with id: " + id));
+
+                organizationalUnitRepository.delete(unit);
+        }
 }

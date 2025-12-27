@@ -44,7 +44,7 @@ public interface ClearanceMapper {
     @Mapping(source = "organizationalUnit.id", target = "organizationalUnitId")
     @Mapping(source = "organizationalUnit.organizationName", target = "organizationalUnitName")
     @Mapping(source = "approvedBy.id", target = "approvedByUserId")
-    @Mapping(target = "approvedByName", expression = "java(approval.getApprovedBy().getFirstName() + \" \" + approval.getApprovedBy().getMiddleName() + \" \" + approval.getApprovedBy().getLastName())")
+    @Mapping(target = "approvedByName", expression = "java(approval.getApprovedBy() != null ? approval.getApprovedBy().getFirstName() + \" \" + approval.getApprovedBy().getMiddleName() + \" \" + approval.getApprovedBy().getLastName() : null)")
     ClearanceApprovalResponseDto toResponse(ClearanceApproval approval);
 
     List<ClearanceResponseDto> toResponse(List<Clearance> students);
