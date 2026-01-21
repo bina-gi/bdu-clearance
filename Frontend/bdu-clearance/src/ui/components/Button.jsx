@@ -7,7 +7,7 @@ function Button({
 }) {
   // Size variants
   const sizeClasses = {
-    small: "text-[1rem] px-2 py-1 uppercase font-semibold text-center",
+    small: "text-[1rem] px-3 py-3 uppercase font-semibold text-center",
     medium: "text-[1.2rem] px-4 py-3 font-medium",
     large: "text-[1.4rem] px-6 py-3 font-medium",
   };
@@ -16,8 +16,8 @@ function Button({
   const variationClasses = {
     primary: `
       text-gray-100
-      bg-navy
-      hover:bg-blueish
+      bg-blue-600
+      hover:bg-blue-800
     `,
     secondary: `
       text-gray-600
@@ -41,7 +41,7 @@ function Button({
         ${base}
         ${sizeClasses[size]}
         ${variationClasses[variation]}
-        ${className}
+        ${className} 
       `}
       {...props}
     >

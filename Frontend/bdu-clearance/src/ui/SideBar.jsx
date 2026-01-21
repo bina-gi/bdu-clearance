@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { navBarIcons } from "../assets/icons";
 import NavBar from "./components/NavBar";
 import Logo from "./Logo";
-import { FileCheck, LayoutDashboard, Search } from "lucide-react";
+import { getNavigationsForUser } from "../assets/navigations";
+import useAuth from "../hooks/useAuth";
 
 function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { role, organizationalUnit } = useAuth();
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
+
+  const filteredNavigations = useMemo(() => {
+    return getNavigationsForUser(role, organizationalUnit);
+  }, [role, organizationalUnit]);
 
   return (
     <>
@@ -19,7 +25,7 @@ function SideBar() {
       ></div>
       <aside
         className={`
-          fixed top-0 left-0 z-40 w-60 h-full bg-light  shadow-sm border border-gray-200 transition-transform
+          fixed top-0 left-0 z-40 w-70 h-full bg-light  shadow-sm border border-gray-200 transition-transform
           lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"}  
           `}
       >
@@ -35,19 +41,14 @@ function SideBar() {
 
           <div className="w-full px-2">
             <div className="flex flex-col items-center w-full mt-3 border-t border-gray-300 pl-2">
-              <NavBar icon={<LayoutDashboard />} navName="Dashboard" page="/" />
-              <NavBar
-                icon={<FileCheck />}
-                navName="Request Clearance"
-                page="request-clearance"
-              />
-              <NavBar icon={<Search />} navName="Search" page="search" />
-              <NavBar icon={navBarIcons.docs} navName="Docs" page="docs" />
-              <NavBar
-                icon={navBarIcons.messages}
-                navName="Message"
-                page="message"
-              />
+              {filteredNavigations.map((navigation) => (
+                <NavBar
+                  key={navigation.title}
+                  icon={<navigation.icon />}
+                  navName={navigation.title}
+                  page={navigation.href}
+                />
+              ))}
             </div>
           </div>
 
