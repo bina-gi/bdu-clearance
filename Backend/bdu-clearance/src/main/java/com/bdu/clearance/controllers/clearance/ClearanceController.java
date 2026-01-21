@@ -3,13 +3,19 @@ package com.bdu.clearance.controllers.clearance;
 import com.bdu.clearance.dto.clearance.ClearanceResponseDto;
 import com.bdu.clearance.dto.clearance.StudentClearanceRequestDto;
 import com.bdu.clearance.services.ClearanceService;
+import com.bdu.clearance.services.PdfService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -18,6 +24,7 @@ import java.util.List;
 public class ClearanceController {
 
     private final ClearanceService clearanceService;
+    private final PdfService pdfService;
 
     // === CREATE ===
     @PreAuthorize("hasRole('STUDENT')")
@@ -57,4 +64,24 @@ public class ClearanceController {
         clearanceService.deleteClearance(clearanceId);
         return ResponseEntity.noContent().build();
     }
+
+    // === DOWNLOAD PDF ===
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> downloadClearancePdf(
+            @PathVariable Long id,
+            Principal principal) {
+        
+        ByteArrayInputStream bis = pdfService.generateClearancePdf(id, principal.getName());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=clearance_" + id + ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+    }
 }
+

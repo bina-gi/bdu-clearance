@@ -50,9 +50,6 @@ public class UserServiceImpl implements UserService {
         String rawPassword = user.getLastName() + user.getUserId();
         user.setPassword(passwordEncoder.encode(rawPassword));
 
-        // System.out.println("Role: " + user.getUserRole());
-        // System.out.println("OrgUnit: " + user.getOrganizationalUnit());
-
         if (user.getIsActive() == null) {
             user.setIsActive(true);
         }
@@ -122,23 +119,4 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
-
-    // @Override
-    // public List<UserResponseDto> getUsersByRole(UserRole role){
-    // List<Users> roleUsers=userRepository.findByRole(role);
-    // if(roleUsers.isEmpty()){
-    // throw new APIException("Campus not found with the Campus Name "+role);
-    // }
-    // return userMapper.toResponse(roleUsers);
-    // }
-    // @Override
-    //
-    // public List<UserResponseDto> getUsersByCampus(Campus campus){
-    // List<Users> campusUsers=userRepository.findByCampus(campus);
-    //
-    // if(campusUsers.isEmpty()){
-    // throw new APIException("Campus not found with the Campus Name "+campus);
-    // }
-    // return userMapper.toResponse(campusUsers);
-    // }
 }

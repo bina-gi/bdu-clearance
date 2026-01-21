@@ -2,6 +2,7 @@ package com.bdu.clearance.services.impl;
 
 import com.bdu.clearance.enums.ApprovalStatus;
 import com.bdu.clearance.enums.ClearanceStatus;
+import com.bdu.clearance.enums.OrgUnitType;
 import com.bdu.clearance.exceptions.APIException;
 import com.bdu.clearance.models.*;
 import com.bdu.clearance.repositories.ClearanceApprovalRepository;
@@ -26,14 +27,6 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
     private final ClearanceApprovalRepository clearanceApprovalRepository;
     private final ClearanceRepository clearanceRepository;
     private final OrganizationalUnitRepository organizationalUnitRepository;
-
-    // Organization type identifiers (matching org_type_id in requirements)
-    private static final String TYPE_LIBRARY = "LIBRARY";
-    private static final String TYPE_STORE = "STORE";
-    private static final String TYPE_DORMITORY = "DORMITORY";
-    private static final String TYPE_CAFETERIA = "CAFETERIA";
-    private static final String TYPE_REGISTRAR = "REGISTRAR";
-    private static final String TYPE_FACULTY = "FACULTY";
 
     // Approval order constants
     private static final int ORDER_ADVISOR = 1;
@@ -74,7 +67,7 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
             // 2. Faculty approver (order 2)
             if (faculty != null) {
                 List<OrganizationalUnit> facultyApprovers = findApproversByParentAndType(
-                        faculty.getId(), TYPE_FACULTY);
+                        faculty.getId(), OrgUnitType.FACULTY);
                 for (OrganizationalUnit orgUnit : facultyApprovers) {
                     approvals.add(createApproval(clearance, orgUnit, ORDER_FACULTY, true));
                 }
@@ -83,25 +76,25 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
             // 3. Service units (order 3 - parallel)
             if (campus != null) {
                 // Dormitory
-                addServiceApprovals(approvals, clearance, campus.getId(), TYPE_DORMITORY);
+                addServiceApprovals(approvals, clearance, campus.getId(), OrgUnitType.DORMITORY);
                 // Cafeteria
-                addServiceApprovals(approvals, clearance, campus.getId(), TYPE_CAFETERIA);
+                addServiceApprovals(approvals, clearance, campus.getId(), OrgUnitType.CAFETERIA);
                 // Library
-                addServiceApprovals(approvals, clearance, campus.getId(), TYPE_LIBRARY);
+                addServiceApprovals(approvals, clearance, campus.getId(), OrgUnitType.LIBRARY);
             }
 
             // Department/Faculty stores
             if (studentDept != null) {
-                addServiceApprovals(approvals, clearance, studentDept.getId(), TYPE_STORE);
+                addServiceApprovals(approvals, clearance, studentDept.getId(), OrgUnitType.STORE);
             }
             if (faculty != null) {
-                addServiceApprovals(approvals, clearance, faculty.getId(), TYPE_STORE);
+                addServiceApprovals(approvals, clearance, faculty.getId(), OrgUnitType.STORE);
             }
 
             // 4. Registrar (order 4 - final)
             if (campus != null) {
                 List<OrganizationalUnit> registrars = findApproversByParentAndType(
-                        campus.getId(), TYPE_REGISTRAR);
+                        campus.getId(), OrgUnitType.REGISTRAR);
                 for (OrganizationalUnit orgUnit : registrars) {
                     approvals.add(createApproval(clearance, orgUnit, ORDER_REGISTRAR, true));
                 }
@@ -128,7 +121,7 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
     }
 
     private void addServiceApprovals(List<ClearanceApproval> approvals, Clearance clearance,
-            Long parentId, String type) {
+            Long parentId, OrgUnitType type) {
         List<OrganizationalUnit> units = findApproversByParentAndType(parentId, type);
         for (OrganizationalUnit orgUnit : units) {
             approvals.add(createApproval(clearance, orgUnit, ORDER_SERVICES, true));
@@ -154,21 +147,21 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
 
         // Faculty approvers
         if (faculty != null) {
-            approvers.addAll(findApproversByParentAndType(faculty.getId(), TYPE_FACULTY));
+            approvers.addAll(findApproversByParentAndType(faculty.getId(), OrgUnitType.FACULTY));
         }
 
         // Campus service units
         if (campus != null) {
-            approvers.addAll(findApproversByParentAndType(campus.getId(), TYPE_DORMITORY));
-            approvers.addAll(findApproversByParentAndType(campus.getId(), TYPE_CAFETERIA));
-            approvers.addAll(findApproversByParentAndType(campus.getId(), TYPE_LIBRARY));
-            approvers.addAll(findApproversByParentAndType(campus.getId(), TYPE_REGISTRAR));
+            approvers.addAll(findApproversByParentAndType(campus.getId(), OrgUnitType.DORMITORY));
+            approvers.addAll(findApproversByParentAndType(campus.getId(), OrgUnitType.CAFETERIA));
+            approvers.addAll(findApproversByParentAndType(campus.getId(), OrgUnitType.LIBRARY));
+            approvers.addAll(findApproversByParentAndType(campus.getId(), OrgUnitType.REGISTRAR));
         }
 
         // Stores at department and faculty level
-        approvers.addAll(findApproversByParentAndType(studentDept.getId(), TYPE_STORE));
+        approvers.addAll(findApproversByParentAndType(studentDept.getId(), OrgUnitType.STORE));
         if (faculty != null) {
-            approvers.addAll(findApproversByParentAndType(faculty.getId(), TYPE_STORE));
+            approvers.addAll(findApproversByParentAndType(faculty.getId(), OrgUnitType.STORE));
         }
 
         log.info("Found {} required approvers for student in department: {}",
@@ -215,6 +208,13 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
             throw new APIException("Approval has already been processed");
         }
 
+        // Validate that previous approval orders are complete
+        if (!arePreviousApprovalsComplete(approval.getClearance().getId(), approval.getApprovalOrder())) {
+            throw new APIException("Previous approvals must be completed first. " +
+                    "This approval is at order " + approval.getApprovalOrder() + 
+                    " and requires all lower order approvals to be approved.");
+        }
+
         // Update the approval
         approval.setStatus(decision);
         approval.setRemarks(remarks);
@@ -229,9 +229,24 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
         updateClearanceStatus(approval.getClearance());
     }
 
-    /**
-     * Updates the clearance status based on the state of all its approvals.
-     */
+    private boolean arePreviousApprovalsComplete(Long clearanceId, Integer currentOrder) {
+        if (currentOrder == null || currentOrder <= 1) {
+            // Order 1 has no previous approvals to check
+            return true;
+        }
+
+        List<ClearanceApproval> previousApprovals = clearanceApprovalRepository
+                .findByClearanceIdAndApprovalOrderLessThan(clearanceId, currentOrder);
+
+        // All required previous approvals must be APPROVED
+        return previousApprovals.stream()
+                .filter(a -> Boolean.TRUE.equals(a.getIsRequired()))
+                .allMatch(a -> a.getStatus() == ApprovalStatus.APPROVED);
+    }
+
+    
+     //Updates the clearance status based on the state of all its approvals.
+     
     private void updateClearanceStatus(Clearance clearance) {
         List<ClearanceApproval> approvals = clearanceApprovalRepository
                 .findByClearanceId(clearance.getId());
@@ -266,7 +281,7 @@ public class ClearanceRoutingServiceImpl implements ClearanceRoutingService {
         clearanceRepository.save(clearance);
     }
 
-    private List<OrganizationalUnit> findApproversByParentAndType(Long parentId, String type) {
-        return organizationalUnitRepository.findByParentIdAndType(parentId, type);
+    private List<OrganizationalUnit> findApproversByParentAndType(Long parentId, OrgUnitType type) {
+        return organizationalUnitRepository.findByParentIdAndType(parentId, type.getValue());
     }
 }

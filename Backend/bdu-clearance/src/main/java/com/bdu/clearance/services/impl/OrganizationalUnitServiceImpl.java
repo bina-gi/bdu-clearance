@@ -47,7 +47,6 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
                 }
 
                 organizationalUnit.setOrganizationalUnitType(unitType);
-
                 organizationalUnitRepository.save(organizationalUnit);
         }
 

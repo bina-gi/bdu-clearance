@@ -41,4 +41,16 @@ public interface ClearanceApprovalRepository extends JpaRepository<ClearanceAppr
      * Find approvals processed by a specific user.
      */
     List<ClearanceApproval> findByApprovedById(Long userId);
+
+    /**
+     * Find approvals for a clearance with order less than the given order.
+     * Used to check if previous approvals are complete before allowing current approval.
+     */
+    List<ClearanceApproval> findByClearanceIdAndApprovalOrderLessThan(Long clearanceId, Integer approvalOrder);
+
+    /**
+     * Find approvals for a clearance ordered by approval order.
+     * Used to determine the current processing state.
+     */
+    List<ClearanceApproval> findByClearanceIdOrderByApprovalOrderAsc(Long clearanceId);
 }

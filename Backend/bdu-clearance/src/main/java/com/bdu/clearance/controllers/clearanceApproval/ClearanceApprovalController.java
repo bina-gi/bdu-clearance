@@ -28,7 +28,7 @@ public class ClearanceApprovalController {
     private final UserRepository userRepository;
 
     // === CREATE ===
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping
     public ResponseEntity<Void> createClearanceApproval(@Valid @RequestBody ClearanceApprovalRequestDto requestDto) {
         clearanceApprovalService.createClearanceApproval(requestDto);
@@ -48,7 +48,7 @@ public class ClearanceApprovalController {
         return ResponseEntity.ok(clearanceApprovalService.getClearanceApprovalById(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR', 'STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
     @GetMapping("/clearance/{clearanceId}")
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getClearanceApprovalsByClearanceId(
             @PathVariable Long clearanceId) {

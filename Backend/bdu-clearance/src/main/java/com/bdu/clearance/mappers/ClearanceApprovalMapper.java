@@ -27,6 +27,9 @@ public interface ClearanceApprovalMapper {
     @Mapping(source = "organizationalUnit.organizationName", target = "organizationalUnitName")
     @Mapping(source = "approvedBy.id", target = "approvedByUserId")
     @Mapping(target = "approvedByName", expression = "java(approval.getApprovedBy() != null ? approval.getApprovedBy().getFirstName() + \" \" + approval.getApprovedBy().getMiddleName() + \" \" + approval.getApprovedBy().getLastName() : null)")
+    @Mapping(source = "approvalOrder", target = "approvalOrder")
+    @Mapping(source = "isRequired", target = "isRequired")
+    @Mapping(target = "canProcess", ignore = true) // Computed at service level
     ClearanceApprovalResponseDto toResponse(ClearanceApproval approval);
 
     List<ClearanceApprovalResponseDto> toResponse(List<ClearanceApproval> approvals);

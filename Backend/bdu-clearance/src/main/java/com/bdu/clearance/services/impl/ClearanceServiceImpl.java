@@ -101,9 +101,8 @@ public class ClearanceServiceImpl implements ClearanceService {
         clearanceRepository.delete(existingClearance);
     }
 
-    /**
-     * Get clearances by status for dashboard filtering.
-     */
+     //Get clearances by status 
+     //for dashboard filtering.
     public List<ClearanceResponseDto> getClearancesByStatus(ClearanceStatus status) {
         List<Clearance> clearances = clearanceRepository.findByStatus(status);
         return clearanceMapper.toResponse(clearances);

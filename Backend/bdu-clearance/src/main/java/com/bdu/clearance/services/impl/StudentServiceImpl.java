@@ -8,6 +8,7 @@ import com.bdu.clearance.mappers.StudentMapper;
 import com.bdu.clearance.models.Student;
 import com.bdu.clearance.models.Users;
 import com.bdu.clearance.repositories.StudentRepository;
+import com.bdu.clearance.repositories.UserRepository;
 import com.bdu.clearance.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
-    private final com.bdu.clearance.repositories.UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<StudentResponseDto> getAllStudents() {
@@ -83,8 +84,6 @@ public class StudentServiceImpl implements StudentService {
                 existingStudent.setAdvisor(advisor);
             }
         } else {
-            // If advisorId is null in DTO, should we remove the advisor?
-            // Assuming yes for flexibility
             existingStudent.setAdvisor(null);
         }
 

@@ -35,6 +35,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> {
+                })
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -51,6 +53,30 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
+    // Exception {
+    // http
+    // .csrf(csrf -> csrf.disable())
+    // .exceptionHandling(exception ->
+    // exception.authenticationEntryPoint(unauthorizedHandler))
+    // .sessionManagement(session ->
+    // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    // .authorizeHttpRequests(auth -> auth
+    // .requestMatchers("/api/auth/**").permitAll()
+    // .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
+    // .requestMatchers("/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
+    // .requestMatchers("/swagger-resources/**", "/webjars/**").permitAll()
+    // .anyRequest().authenticated())
+    // .formLogin(form -> form.disable())
+    // .httpBasic(basic -> basic.disable());
+
+    // http.addFilterBefore(authTokenFilter,
+    // UsernamePasswordAuthenticationFilter.class);
+
+    // return http.build();
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
