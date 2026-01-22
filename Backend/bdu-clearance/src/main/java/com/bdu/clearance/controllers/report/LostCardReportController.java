@@ -55,4 +55,14 @@ public class LostCardReportController {
         lostCardReportService.deleteLostCardReport(id);
         return ResponseEntity.noContent().build();
     }
+
+    // === PROCESS (Approve/Reject) ===
+    @PatchMapping("/{id}/process")
+    public ResponseEntity<Void> processLostCardReport(
+            @PathVariable Long id,
+            @RequestParam("status") com.bdu.clearance.enums.ApprovalStatus status,
+            @RequestParam("processedByUserId") Long processedByUserId) {
+        lostCardReportService.processLostCardReport(id, status, processedByUserId);
+        return ResponseEntity.ok().build();
+    }
 }

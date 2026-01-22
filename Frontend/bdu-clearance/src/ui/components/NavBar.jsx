@@ -12,8 +12,10 @@ function NavBar({ icon, navName, page, isAccount = false, onClick }) {
       to={page}
       onClick={onClick}
     >
-      <span className="w-6 h-6 stroke-current">{icon}</span>
-      <span className="ml-2 text-sm font-medium">{navName}</span>
+      <>
+        <span className="w-6 h-6 stroke-current">{icon}</span>
+        <span className="ml-2 text-sm font-medium">{navName}</span>
+      </>
     </NavLink>
   );
 }

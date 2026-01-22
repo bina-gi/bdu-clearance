@@ -16,23 +16,23 @@ export const navigations = [
     href: "/",
     roles: ["ADMIN", "STAFF", "STUDENT", "ADVISOR"],
     orgUnits: null, // null means all org units
-    icon: Home,
+    icon: <Home />,
   },
 
   // Student Pages
   {
-    title: "Clearance",
-    href: "/clearance",
+    title: "Request Clearance",
+    href: "/request-clearance",
     roles: ["STUDENT"],
     orgUnits: null,
-    icon: FileCheck,
+    icon: <FileCheck />,
   },
   {
     title: "Report Lost Card",
     href: "/report-lost-card",
     roles: ["STUDENT"],
     orgUnits: null,
-    icon: IdCard,
+    icon: <IdCard />,
   },
 
   // Staff & Advisor Pages (shared)
@@ -41,23 +41,23 @@ export const navigations = [
     href: "/requested-clearances",
     roles: ["STAFF", "ADVISOR"],
     orgUnits: null,
-    icon: ClipboardList,
+    icon: <ClipboardList />,
   },
 
   // Org-specific pages for STAFF (Library, Cafeteria, etc.)
   {
-    title: "Lost Card Reports",
-    href: "/lost-card-reports",
+    title: "Lost Cards",
+    href: "/lost-cards",
     roles: ["STAFF"],
     orgUnits: ["LIBRARY", "CAFETERIA"], // Only these org units see this
-    icon: IdCard,
+    icon: <IdCard />,
   },
   {
     title: "Property",
     href: "/property",
     roles: ["STAFF"],
     orgUnits: ["LIBRARY", "CAFETERIA", "REGISTRAR"], // Only these org units see this
-    icon: Package,
+    icon: <Package />,
   },
 
   // Admin Pages
@@ -66,46 +66,38 @@ export const navigations = [
     href: "/user-management",
     roles: ["ADMIN"],
     orgUnits: null,
-    icon: Users,
+    icon: <Users />,
   },
   {
     title: "Roles",
     href: "/roles",
     roles: ["ADMIN"],
     orgUnits: null,
-    icon: Shield,
+    icon: <Shield />,
   },
   {
     title: "Organizational Unit",
     href: "/organizational-unit",
     roles: ["ADMIN"],
     orgUnits: null,
-    icon: Building,
+    icon: <Building />,
   },
   {
     title: "Organization Types",
     href: "/organization-types",
     roles: ["ADMIN"],
     orgUnits: null,
-    icon: Layers,
+    icon: <Layers />,
   },
 ];
 
-/**
- * Filter navigations based on user role and organizational unit
- * @param {string} role - User's role (ADMIN, STAFF, STUDENT, ADVISOR)
- * @param {string|null} orgUnit - User's organizational unit (e.g., LIBRARY, CAFETERIA)
- * @returns {Array} Filtered navigation items
- */
 export const getNavigationsForUser = (role, orgUnit) => {
   if (!role) return [];
 
   return navigations.filter((nav) => {
-    // Check if user's role is allowed
     const roleAllowed = nav.roles.includes(role);
     if (!roleAllowed) return false;
 
-    // If nav has orgUnits restriction, check if user's orgUnit matches
     if (nav.orgUnits !== null) {
       return orgUnit && nav.orgUnits.includes(orgUnit);
     }

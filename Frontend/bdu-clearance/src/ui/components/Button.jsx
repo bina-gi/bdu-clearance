@@ -3,6 +3,8 @@ function Button({
   variation = "primary",
   children,
   className = "",
+  isLoading,
+  disabled,
   ...props
 }) {
   // Size variants
@@ -43,6 +45,7 @@ function Button({
         ${variationClasses[variation]}
         ${className} 
       `}
+      disabled={isLoading || disabled}
       {...props}
     >
       {children}

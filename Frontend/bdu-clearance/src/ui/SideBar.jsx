@@ -44,7 +44,7 @@ function SideBar() {
               {filteredNavigations.map((navigation) => (
                 <NavBar
                   key={navigation.title}
-                  icon={<navigation.icon />}
+                  icon={navigation.icon}
                   navName={navigation.title}
                   page={navigation.href}
                 />
@@ -52,7 +52,12 @@ function SideBar() {
             </div>
           </div>
 
-          <NavBar navName="Account" icon={navBarIcons.account} isAccount />
+          <NavBar
+            navName="Account"
+            icon={navBarIcons.account}
+            isAccount
+            page="/account"
+          />
         </div>
       </aside>
     </>

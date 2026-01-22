@@ -36,7 +36,7 @@ public class ClearanceApprovalController {
     }
 
     // === READ ===
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('STAFF')")
     @GetMapping
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getAllClearanceApprovals() {
         return ResponseEntity.ok(clearanceApprovalService.getAllClearanceApprovals());
@@ -48,14 +48,14 @@ public class ClearanceApprovalController {
         return ResponseEntity.ok(clearanceApprovalService.getClearanceApprovalById(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR','STUDENT')")
     @GetMapping("/clearance/{clearanceId}")
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getClearanceApprovalsByClearanceId(
             @PathVariable Long clearanceId) {
         return ResponseEntity.ok(clearanceApprovalService.getClearanceApprovalsByClearanceId(clearanceId));
     }
 
-    @PreAuthorize("hasAnyRole('STAFF', 'ADVISOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'ADVISOR')")
     @GetMapping("/pending")
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getPendingForMyOrg(
             @AuthenticationPrincipal UserDetails userDetails) {
