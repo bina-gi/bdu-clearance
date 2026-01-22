@@ -7,15 +7,30 @@ import useAuth from "../hooks/useAuth";
 
 function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { role, organizationalUnit } = useAuth();
+  const { role, organizationalUnit, organizationalUnitType } = useAuth();
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
 
   const filteredNavigations = useMemo(() => {
-    return getNavigationsForUser(role, organizationalUnit);
-  }, [role, organizationalUnit]);
+    // derive a simple org unit type string to match navigations.orgUnits values
+    let orgType = null;
+    if (organizationalUnit) {
+      if (typeof organizationalUnit === "string") orgType = organizationalUnit;
+      else if (
+        organizationalUnit.organizationalUnitType &&
+        organizationalUnit.organizationalUnitType.organizationType
+      )
+        orgType = organizationalUnit.organizationalUnitType.organizationType;
+      else if (organizationalUnit.organizationType)
+        orgType = organizationalUnit.organizationType;
+    }
+    // fallback to organizationalUnitType from auth context
+    if (!orgType && organizationalUnitType) orgType = organizationalUnitType;
+
+    return getNavigationsForUser(role, orgType && orgType.toUpperCase());
+  }, [role, organizationalUnit, organizationalUnitType]);
 
   return (
     <>

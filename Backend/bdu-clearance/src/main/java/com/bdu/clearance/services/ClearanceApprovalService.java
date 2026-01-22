@@ -6,6 +6,7 @@ import com.bdu.clearance.dto.clearanceApproval.ClearanceApprovalResponseDto;
 import java.util.List;
 
 public interface ClearanceApprovalService {
+
     void createClearanceApproval(ClearanceApprovalRequestDto requestDto);
 
     ClearanceApprovalResponseDto getClearanceApprovalById(Long id);
@@ -15,6 +16,8 @@ public interface ClearanceApprovalService {
     List<ClearanceApprovalResponseDto> getClearanceApprovalsByClearanceId(Long clearanceId);
 
     List<ClearanceApprovalResponseDto> getPendingByOrganizationalUnit(Long orgId);
+
+    List<ClearanceApprovalResponseDto> getPendingForUser(String currentUserId);
 
     void updateClearanceApproval(Long id, ClearanceApprovalRequestDto requestDto);
 

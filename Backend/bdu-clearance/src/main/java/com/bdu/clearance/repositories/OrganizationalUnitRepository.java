@@ -17,19 +17,11 @@ public interface OrganizationalUnitRepository extends JpaRepository<Organization
 
     List<OrganizationalUnit> findByParentOrganizationId(String parentOrganizationId);
 
-    /**
-     * Find organizational units by parent ID and organization type.
-     * Used for routing logic to find specific approvers (e.g., stores, library)
-     * under a parent org.
-     */
-    @Query("SELECT ou FROM OrganizationalUnit ou " +
-            "WHERE ou.parent.id = :parentId " +
-            "AND ou.organizationalUnitType.organizationType = :type")
+    @Query("SELECT ou FROM OrganizationalUnit ou "
+            + "WHERE ou.parent.id = :parentId "
+            + "AND ou.organizationalUnitType.organizationType = :type")
     List<OrganizationalUnit> findByParentIdAndType(@Param("parentId") Long parentId,
             @Param("type") String type);
 
-    /**
-     * Find all child organizational units under a parent.
-     */
     List<OrganizationalUnit> findByParentId(Long parentId);
 }

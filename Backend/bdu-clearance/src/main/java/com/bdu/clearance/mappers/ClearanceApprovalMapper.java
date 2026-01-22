@@ -30,6 +30,9 @@ public interface ClearanceApprovalMapper {
     @Mapping(source = "approvalOrder", target = "approvalOrder")
     @Mapping(source = "isRequired", target = "isRequired")
     @Mapping(target = "canProcess", ignore = true) // Computed at service level
+    @Mapping(source = "clearance.id", target = "clearanceId")
+    @Mapping(target = "studentName", expression = "java(approval.getClearance() != null && approval.getClearance().getStudent() != null && approval.getClearance().getStudent().getUser() != null ? approval.getClearance().getStudent().getUser().getFirstName() + \" \" + approval.getClearance().getStudent().getUser().getMiddleName() + \" \" + approval.getClearance().getStudent().getUser().getLastName() : null)")
+    @Mapping(target = "requestDate", expression = "java(approval.getClearance() != null && approval.getClearance().getRequestDate() != null ? approval.getClearance().getRequestDate().toString() : null)")
     ClearanceApprovalResponseDto toResponse(ClearanceApproval approval);
 
     List<ClearanceApprovalResponseDto> toResponse(List<ClearanceApproval> approvals);

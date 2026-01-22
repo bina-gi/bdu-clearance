@@ -1,11 +1,13 @@
 package com.bdu.clearance.services.impl;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import org.springframework.stereotype.Service;
 
 import com.bdu.clearance.dto.clearanceApproval.ClearanceApprovalRequestDto;
 import com.bdu.clearance.dto.clearanceApproval.ClearanceApprovalResponseDto;
+import com.bdu.clearance.enums.ApprovalStatus;
 import com.bdu.clearance.exceptions.APIException;
 import com.bdu.clearance.mappers.ClearanceApprovalMapper;
 import com.bdu.clearance.models.Clearance;
@@ -14,6 +16,7 @@ import com.bdu.clearance.models.OrganizationalUnit;
 import com.bdu.clearance.repositories.ClearanceApprovalRepository;
 import com.bdu.clearance.repositories.ClearanceRepository;
 import com.bdu.clearance.repositories.OrganizationalUnitRepository;
+import com.bdu.clearance.repositories.UserRepository;
 import com.bdu.clearance.services.ClearanceApprovalService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
     private final ClearanceApprovalMapper clearanceApprovalMapper;
     private final ClearanceRepository clearanceRepository;
     private final OrganizationalUnitRepository organizationalUnitRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void createClearanceApproval(ClearanceApprovalRequestDto requestDto) {
@@ -96,8 +100,8 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
             existingApproval.setOrganizationalUnit(orgUnit);
         }
 
-        if (existingApproval.getStatus() != com.bdu.clearance.enums.ApprovalStatus.PENDING) {
-            existingApproval.setApprovalDate(java.time.LocalDateTime.now());
+        if (existingApproval.getStatus() != ApprovalStatus.PENDING) {
+            existingApproval.setApprovalDate(LocalDateTime.now());
         }
 
         clearanceApprovalRepository.save(existingApproval);
@@ -107,6 +111,49 @@ public class ClearanceApprovalServiceImpl implements ClearanceApprovalService {
     public List<ClearanceApprovalResponseDto> getPendingByOrganizationalUnit(Long orgId) {
         return clearanceApprovalMapper.toResponse(
                 clearanceApprovalRepository.findPendingByOrganizationalUnit(orgId));
+    }
+
+    @Override
+    public List<ClearanceApprovalResponseDto> getPendingForUser(String currentUserId) {
+        com.bdu.clearance.models.Users currentUser = userRepository.findByUserId(currentUserId)
+                .orElseThrow(() -> new APIException("User not found with id: " + currentUserId));
+        // collect unit ids to include: at minimum user's own org unit
+        if (currentUser.getOrganizationalUnit() == null) {
+            return List.of();
+        }
+
+        Long myOrgId = currentUser.getOrganizationalUnit().getId();
+        Set<Long> unitIds = new HashSet<>();
+        unitIds.add(myOrgId);
+
+        // if the org has a parent, include sibling units (units under the same parent)
+        if (currentUser.getOrganizationalUnit().getParent() != null) {
+            Long parentId = currentUser.getOrganizationalUnit().getParent().getId();
+            List<OrganizationalUnit> siblingUnits = organizationalUnitRepository.findByParentId(parentId);
+            siblingUnits.stream().map(com.bdu.clearance.models.OrganizationalUnit::getId)
+                    .forEach(unitIds::add);
+        }
+
+        // fetch approvals for these units
+        List<ClearanceApproval> approvals = clearanceApprovalRepository.findPendingByOrganizationalUnits(
+                new ArrayList<>(unitIds));
+
+        // If user is an ADVISOR, restrict to approvals for students they advise
+        if (currentUser.getUserRole() != null && currentUser.getUserRole().getRoleName() == com.bdu.clearance.enums.UserRole.ADVISOR) {
+            approvals = approvals.stream()
+                    .filter(a -> a.getClearance() != null && a.getClearance().getStudent() != null && a.getClearance().getStudent().getAdvisor() != null
+                    && Objects.equals(a.getClearance().getStudent().getAdvisor().getId(), currentUser.getId()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        List<ClearanceApprovalResponseDto> dtos = clearanceApprovalMapper.toResponse(approvals);
+
+        // compute canProcess for each dto based on approvals list
+        for (ClearanceApprovalResponseDto dto : dtos) {
+            dto.setCanProcess(canApprovalBeProcessed(approvals, dto.getApprovalOrder()));
+        }
+
+        return dtos;
     }
 
     @Override

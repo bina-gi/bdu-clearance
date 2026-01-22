@@ -99,7 +99,6 @@ export default function LostCards() {
     await processReportMutation.mutateAsync({
       id: selectedReport.id,
       status,
-      processedByUserId: user?.id || 0, // Using logged-in user's ID
     });
 
     closeModal();

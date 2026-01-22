@@ -1,6 +1,5 @@
 package com.bdu.clearance.dto.clearanceApproval;
 
-
 import com.bdu.clearance.enums.ApprovalStatus;
 import lombok.Data;
 
@@ -22,6 +21,10 @@ public class ClearanceApprovalResponseDto {
     private Boolean isRequired;
 
     private Boolean canProcess;
+    // Extra fields for UI convenience
+    private Long clearanceId;
+    private String studentName;
+    private String requestDate;
 
     public Integer getApprovalOrder() {
         return approvalOrder;

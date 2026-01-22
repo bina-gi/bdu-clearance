@@ -59,13 +59,8 @@ public class ClearanceApprovalController {
     @GetMapping("/pending")
     public ResponseEntity<List<ClearanceApprovalResponseDto>> getPendingForMyOrg(
             @AuthenticationPrincipal UserDetails userDetails) {
-        Users user = userRepository.findByUserId(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Long orgId = user.getOrganizationalUnit() != null ? user.getOrganizationalUnit().getId() : null;
-        if (orgId == null) {
-            return ResponseEntity.ok(List.of());
-        }
-        return ResponseEntity.ok(clearanceApprovalService.getPendingByOrganizationalUnit(orgId));
+        String username = userDetails.getUsername();
+        return ResponseEntity.ok(clearanceApprovalService.getPendingForUser(username));
     }
 
     @PreAuthorize("hasAnyRole('STAFF', 'ADVISOR')")

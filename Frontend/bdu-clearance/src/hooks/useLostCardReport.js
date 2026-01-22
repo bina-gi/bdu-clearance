@@ -91,12 +91,8 @@ export const useProcessLostCardReport = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status, processedByUserId }) =>
-      lostCardReportService.processLostCardReport(
-        id,
-        status,
-        processedByUserId,
-      ),
+    mutationFn: ({ id, status }) =>
+      lostCardReportService.processLostCardReport(id, status),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: LOST_CARD_KEYS.all });
       const action = variables.status === "APPROVED" ? "approved" : "rejected";

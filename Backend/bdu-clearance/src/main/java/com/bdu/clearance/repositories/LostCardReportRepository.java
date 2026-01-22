@@ -7,5 +7,8 @@ import com.bdu.clearance.models.LostCardReport;
 
 @Repository
 public interface LostCardReportRepository extends JpaRepository<LostCardReport, Long> {
+
     java.util.List<LostCardReport> findByStudentId(Long studentId);
+
+    java.util.List<LostCardReport> findByStudent_User_OrganizationalUnit_IdIn(java.util.List<Long> organizationalUnitIds);
 }

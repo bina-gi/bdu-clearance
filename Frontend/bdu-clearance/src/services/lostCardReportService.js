@@ -57,11 +57,11 @@ const deleteLostCardReport = async (id) => {
  * Process a lost card report (approve/reject)
  * @param {number} id - Report ID
  * @param {string} status - APPROVED or REJECTED
- * @param {number} processedByUserId - User ID of the staff processing
+ * The backend will use the authenticated user as the processor.
  */
-const processLostCardReport = async (id, status, processedByUserId) => {
+const processLostCardReport = async (id, status) => {
   await api.patch(`${BASE_URL}/${id}/process`, null, {
-    params: { status, processedByUserId },
+    params: { status },
   });
 };
 

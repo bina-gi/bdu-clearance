@@ -4,6 +4,8 @@ import com.bdu.clearance.dto.report.ReportRequestDto;
 import com.bdu.clearance.dto.report.ReportResponseDto;
 import com.bdu.clearance.services.LostCardReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,8 @@ public class LostCardReportController {
     // === READ ===
     @GetMapping
     public ResponseEntity<List<ReportResponseDto>> getAllLostCardReports() {
-        return ResponseEntity.ok(lostCardReportService.getAllLostCardReports());
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(lostCardReportService.getAllLostCardReportsForUser(currentUsername));
     }
 
     @GetMapping("/{id}")
@@ -57,12 +60,13 @@ public class LostCardReportController {
     }
 
     // === PROCESS (Approve/Reject) ===
+    @PreAuthorize("hasAnyRole('STAFF','ADVISOR')")
     @PatchMapping("/{id}/process")
     public ResponseEntity<Void> processLostCardReport(
             @PathVariable Long id,
-            @RequestParam("status") com.bdu.clearance.enums.ApprovalStatus status,
-            @RequestParam("processedByUserId") Long processedByUserId) {
-        lostCardReportService.processLostCardReport(id, status, processedByUserId);
+            @RequestParam("status") com.bdu.clearance.enums.ApprovalStatus status) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        lostCardReportService.processLostCardReport(id, status, currentUsername);
         return ResponseEntity.ok().build();
     }
 }

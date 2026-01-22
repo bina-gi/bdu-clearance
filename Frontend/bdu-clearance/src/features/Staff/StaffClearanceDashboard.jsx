@@ -90,7 +90,9 @@ export default function StaffClearanceDashboard() {
 
   const columns = [
     { header: "Approval ID", className: "w-24" },
-    { header: "Clearance ID", className: "w-24" },
+    { header: "Clearance ID", className: "w-28" },
+    { header: "Student", className: "flex-1" },
+    { header: "Requested", className: "w-48" },
     { header: "Action", className: "text-right" },
   ];
 
@@ -115,14 +117,12 @@ export default function StaffClearanceDashboard() {
       className="hover:bg-gray-50 border-b border-gray-100 last:border-0"
     >
       <td className="p-4 text-sm font-medium text-gray-900">#{approval.id}</td>
-      {/* We assume we might get clearanceId if the DTO has it? 
-            The DTO provided in prompt doesn't explicitly show `clearanceId` field in ResponseDto, 
-            only RequestDto has it. But usually Response has it.
-            I'll display ID for now.
-        */}
+      <td className="p-4 text-sm text-gray-700">{approval.clearanceId}</td>
+      <td className="p-4 text-sm text-gray-700">
+        {approval.studentName || "-"}
+      </td>
       <td className="p-4 text-sm text-gray-500">
-        {/* Placeholder for fetching clearance details if needed */}
-        <span className="font-mono">Req-ID</span>
+        {approval.requestDate || "-"}
       </td>
       <td className="p-4 text-right">
         <div className="flex justify-end gap-2">
@@ -154,6 +154,8 @@ export default function StaffClearanceDashboard() {
           title="Clearance Approvals"
           description={`Manage pending clearance requests for ${organizationalUnit || "your unit"}.`}
         />
+
+        <div className="mt-2 text-sm text-red-600">don forget</div>
 
         <div className="mt-8">
           <DataTable

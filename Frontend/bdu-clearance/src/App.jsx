@@ -14,6 +14,9 @@ import UserManagement from "./features/User/UserManagement";
 import Account from "./pages/Account";
 import StaffClearanceDashboard from "./features/Staff/StaffClearanceDashboard";
 import LostCards from "./features/Staff/LostCards";
+import StaffDashboard from "./pages/StaffDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 import Login from "./pages/Login";
 import ProtectedRoute from "./ui/ProtectedRoute";
@@ -64,6 +67,9 @@ function App() {
               path="requested-clearances"
               element={<StaffClearanceDashboard />}
             />
+            <Route path="staff-dashboard" element={<StaffDashboard />} />
+            <Route path="student-dashboard" element={<StudentDashboard />} />
+            <Route path="admin-dashboard" element={<AdminDashboard />} />
             <Route path="lost-card-reports" element={<LostCards />} />
 
             <Route path="roles" element={<Role />} />
